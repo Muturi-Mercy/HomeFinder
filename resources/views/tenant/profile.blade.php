@@ -59,14 +59,44 @@
             </div>
 
             <!-- ACTION BUTTONS -->
-            <div style="display:flex; gap:12px;">
-                <a href="/favourites" class="btn btn-outline">❤️ My Favourites</a>
-                <a href="/bookings" class="btn btn-outline">📅 My Bookings</a>
-                <form method="POST" action="/logout" style="margin-left:auto;">
-                    @csrf
-                    <button type="submit" class="btn btn-danger" style="background:#dc2626; color:white;">🚪 Logout</button>
-                </form>
-            </div>
+           
+            <h4 style="font-size:15px; font-weight:700; margin-bottom:16px; padding-top:16px; border-top:1px solid var(--border);">Update Profile</h4>
+
+            @if(session('success'))
+                <div class="alert alert-success" style="margin-bottom:16px;">{{ session('success') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('tenant.profile.update') }}">
+                @csrf
+                @method('PUT')
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                    <div>
+                        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Full Name</label>
+                        <input type="text" name="name" value="{{ Auth::user()->name }}"
+                            style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none;">
+                    </div>
+                    <div>
+                        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Phone Number</label>
+                        <input type="text" name="phone" value="{{ Auth::user()->phone }}"
+                            style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none;">
+                    </div>
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">New Password <span style="font-weight:400; color:var(--gray);">(leave blank to keep current)</span></label>
+                    <input type="password" name="password"
+                        style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none;"
+                        placeholder="Enter new password">
+                </div>
+                <div style="display:flex; gap:12px;">
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    <a href="/favourites" class="btn btn-outline">❤️ Favourites</a>
+                    <a href="/bookings" class="btn btn-outline">📅 Bookings</a>
+                    <form method="POST" action="/logout" style="margin-left:auto;">
+                        @csrf
+                        <button type="submit" class="btn" style="background:#dc2626; color:white;">🚪 Logout</button>
+                    </form>
+                </div>
+            </form>
         </div>
     </div>
 </div>

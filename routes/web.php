@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Landlord\LandlordController;
 use App\Http\Controllers\Tenant\PropertyController;
 use App\Http\Controllers\Tenant\MessageController;
+use App\Http\Controllers\Tenant\TenantController;
 
 // ─── HOME ───────────────────────────────────────────
 Route::get('/', function () {
@@ -34,6 +35,7 @@ Route::middleware(['isTenant'])->group(function () {
     Route::get('/bookings', [PropertyController::class, 'bookings'])->name('tenant.bookings');
     Route::post('/bookings/{property}', [PropertyController::class, 'bookViewing'])->name('tenant.book');
     Route::post('/report/{property}', [PropertyController::class, 'report'])->name('tenant.report');
+    Route::put('/profile', [TenantController::class, 'updateProfile'])->name('tenant.profile.update');
     Route::get('/profile', function () {
         return view('tenant.profile');
     })->name('tenant.profile');
