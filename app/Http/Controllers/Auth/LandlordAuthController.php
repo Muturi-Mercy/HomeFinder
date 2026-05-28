@@ -13,6 +13,9 @@ class LandlordAuthController extends Controller
 {
     public function showRegister()
     {
+       if (Auth::guard('landlord')->check()) {
+        return redirect()->route('landlord.dashboard');
+        }
         return view('auth.landlord-register');
     }
 
@@ -38,6 +41,9 @@ class LandlordAuthController extends Controller
 
     public function showLogin()
     {
+        if (Auth::guard('landlord')->check()) {
+        return redirect()->route('landlord.dashboard');
+        }
         return view('auth.landlord-login');
     }
 

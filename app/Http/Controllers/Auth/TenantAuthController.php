@@ -12,6 +12,9 @@ class TenantAuthController extends Controller
 {
     public function showRegister()
     {
+        if (Auth::guard('web')->check()) {
+        return redirect()->route('tenant.dashboard');
+        }
         return view('auth.tenant-register');
     }
 
@@ -35,8 +38,12 @@ class TenantAuthController extends Controller
             ->with('success', 'Account created! Please login.');
     }
 
+    
     public function showLogin()
     {
+        if (Auth::guard('web')->check()) {
+        return redirect()->route('tenant.dashboard');
+        }
         return view('auth.tenant-login');
     }
 
