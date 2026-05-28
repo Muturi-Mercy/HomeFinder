@@ -88,4 +88,5 @@ Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
     Route::post('/reports/{report}', [AdminController::class, 'updateReport'])->name('admin.reports.update');
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('admin.analytics');
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::post('/landlords/{landlord}/verify', [AdminController::class, 'verifyLandlord'])->name('admin.landlords.verify');
 });

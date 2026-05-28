@@ -68,6 +68,14 @@ class AdminController extends Controller
         return view('admin.landlords', compact('landlords'));
     }
 
+    // Verify Landlord
+    public function verifyLandlord(Landlord $landlord)
+    {
+        $landlord->is_verified = !$landlord->is_verified;
+        $landlord->save();
+        return back()->with('success', 'Landlord verification status updated.');
+    }
+
     // Toggle Landlord Status
     public function toggleLandlord(Landlord $landlord)
     {

@@ -52,12 +52,20 @@
                         </td>
                         <td style="font-size:13px; color:var(--gray);">{{ $landlord->created_at->format('d M Y') }}</td>
                         <td>
-                            <form method="POST" action="{{ route('admin.landlords.toggle', $landlord) }}">
-                                @csrf
-                                <button class="btn btn-sm {{ $landlord->status === 'active' ? 'btn-danger' : 'btn-success' }}">
-                                    {{ $landlord->status === 'active' ? 'Suspend' : 'Activate' }}
-                                </button>
-                            </form>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <form method="POST" action="{{ route('admin.landlords.toggle', $landlord) }}">
+                                    @csrf
+                                    <button class="btn btn-sm {{ $landlord->status === 'active' ? 'btn-danger' : 'btn-success' }}">
+                                        {{ $landlord->status === 'active' ? 'Suspend' : 'Activate' }}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('admin.landlords.verify', $landlord) }}">
+                                    @csrf
+                                    <button class="btn btn-sm {{ $landlord->is_verified ? 'btn-warning' : 'btn-primary' }}">
+                                        {{ $landlord->is_verified ? '✓ Verified' : 'Verify' }}
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
