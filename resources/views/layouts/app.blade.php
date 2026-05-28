@@ -23,6 +23,20 @@
     </div>
     <div style="display:flex; gap:12px; align-items:center;">
         @auth
+            @php
+                $unreadMessages = \App\Models\Message::where('user_id', Auth::id())
+                    ->where('sender', 'landlord')
+                    ->where('is_read', false)
+                    ->count();
+            @endphp
+
+            <a href="/messages" style="position:relative; display:inline-flex; align-items:center; gap:6px; color:var(--text); font-weight:500; padding:8px 12px; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f0faf5'" onmouseout="this.style.background='transparent'">
+                💬 Messages
+                @if($unreadMessages > 0)
+                    <span style="background:#ef4444; color:white; font-size:11px; font-weight:700; padding:2px 7px; border-radius:10px; line-height:1.4;">{{ $unreadMessages }}</span>
+                @endif
+            </a>
+
             <a href="/dashboard" class="btn btn-outline">Dashboard</a>
             <form method="POST" action="/logout" style="display:inline">
                 @csrf
@@ -74,7 +88,6 @@
         <p>&copy; {{ date('Y') }} HomeFinder. All rights reserved. | Multimedia University of Kenya</p>
     </div>
 </footer>
-
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 @yield('scripts')
