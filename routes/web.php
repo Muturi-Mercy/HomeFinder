@@ -33,6 +33,7 @@ Route::middleware(['isTenant'])->group(function () {
     Route::post('/favourites/{property}', [PropertyController::class, 'toggleFavourite'])->name('tenant.favourite.toggle');
     Route::get('/bookings', [PropertyController::class, 'bookings'])->name('tenant.bookings');
     Route::post('/bookings/{property}', [PropertyController::class, 'bookViewing'])->name('tenant.book');
+    Route::post('/report/{property}', [PropertyController::class, 'report'])->name('tenant.report');
     Route::get('/profile', function () {
         return view('tenant.profile');
     })->name('tenant.profile');

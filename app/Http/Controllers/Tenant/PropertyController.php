@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\Favourite;
 use App\Models\Booking;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -147,5 +148,23 @@ class PropertyController extends Controller
             ->where('user_id', $user->id)
             ->latest()->paginate(10);
         return view('tenant.bookings', compact('bookings'));
+    }
+
+    // Report a listing
+    public function report(Request $request, Property $property)
+    {
+        $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        Report::create([
+            'user_id'     => Auth::id(),
+            'property_id' => $property->id,
+            'reason'      => $request->reason,
+            'description' => $request->description,
+            'status'      => 'pending',
+        ]);
+
+        return back()->with('success', 'Report submitted. Our team will review it shortly.');
     }
 }
