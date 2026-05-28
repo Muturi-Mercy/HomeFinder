@@ -105,18 +105,72 @@
             </div>
 
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">📍 Location Coordinates (Optional)</div>
-                <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">Adding coordinates enables map view for tenants. You can get these from Google Maps.</p>
+                <div class="section-title">📍 Property Location on Map</div>
+                <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
+                    Click anywhere on the map to pin your property location. Coordinates will fill automatically.
+                </p>
+
+                <!-- MAP PIN -->
+                <div id="pinMap" style="height:300px; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:16px; cursor:crosshair;"></div>
+
+                <div style="background:#f0faf5; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:var(--primary);" id="pinStatus">
+                    📍 Click on the map above to pin your property location
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Latitude</label>
-                        <input type="text" name="latitude" class="form-control" placeholder="e.g. -1.3978" value="{{ old('latitude') }}">
+                        <label>Latitude (auto-filled)</label>
+                        <input type="text" name="latitude" id="latInput" class="form-control" placeholder="Click map to set" value="{{ old('latitude') }}" readonly style="background:#f8f9fa;">
                     </div>
                     <div class="form-group">
-                        <label>Longitude</label>
-                        <input type="text" name="longitude" class="form-control" placeholder="e.g. 36.7565" value="{{ old('longitude') }}">
+                        <label>Longitude (auto-filled)</label>
+                        <input type="text" name="longitude" id="lngInput" class="form-control" placeholder="Click map to set" value="{{ old('longitude') }}" readonly style="background:#f8f9fa;">
                     </div>
                 </div>
+
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const pinMap = L.map('pinMap').setView([-1.3978, 36.7565], 14);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap'
+                    }).addTo(pinMap);
+
+                    let marker = null;
+
+                    // If old values exist place marker
+                    const oldLat = document.getElementById('latInput').value;
+                    const oldLng = document.getElementById('lngInput').value;
+                    if (oldLat && oldLng) {
+                        marker = L.marker([parseFloat(oldLat), parseFloat(oldLng)]).addTo(pinMap);
+                        pinMap.setView([parseFloat(oldLat), parseFloat(oldLng)], 16);
+                        document.getElementById('pinStatus').textContent = '✅ Location pinned! Click again to change it.';
+                    }
+
+                    pinMap.on('click', function(e) {
+                        const lat = e.latlng.lat.toFixed(7);
+                        const lng = e.latlng.lng.toFixed(7);
+
+                        if (marker) pinMap.removeLayer(marker);
+
+                        const icon = L.divIcon({
+                            html: '<div style="background:#1E7A5A; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Your Property</div>',
+                            className: '',
+                            iconAnchor: [0, 0]
+                        });
+
+                        marker = L.marker([lat, lng], {icon}).addTo(pinMap);
+
+                        document.getElementById('latInput').value = lat;
+                        document.getElementById('lngInput').value = lng;
+                        document.getElementById('pinStatus').innerHTML = `✅ Location pinned at <strong>${lat}, ${lng}</strong>. Click again to change.`;
+                        document.getElementById('pinStatus').style.background = '#d1fae5';
+                        document.getElementById('pinStatus').style.color = '#065f46';
+                    });
+                });
+                </script>
             </div>
 
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">

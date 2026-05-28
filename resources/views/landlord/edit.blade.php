@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Property - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         .form-group{margin-bottom:20px;}
         .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
@@ -27,6 +28,7 @@
             <li><a href="{{ route('landlord.properties') }}" class="active"><span class="icon">🏠</span> My Listings</a></li>
             <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
             <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
+            <li><a href="{{ route('landlord.messages') }}"><span class="icon">💬</span> Messages</a></li>
         </ul>
         <div style="padding:24px;">
             <form method="POST" action="{{ route('landlord.logout') }}">
@@ -42,6 +44,10 @@
             <p style="color:var(--gray); font-size:14px;">Update your property details. It will be re-submitted for admin review.</p>
         </div>
 
+        @if(session('success'))
+            <div style="background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; padding:14px; border-radius:8px; margin-bottom:16px;">{{ session('success') }}</div>
+        @endif
+
         @if($errors->any())
             <div style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; padding:14px; border-radius:8px; margin-bottom:16px;">
                 <ul style="margin:0; padding-left:20px;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
@@ -52,6 +58,7 @@
             @csrf
             @method('PUT')
 
+            {{-- BASIC INFO --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div class="section-title">📋 Basic Information</div>
                 <div class="form-group">
@@ -100,20 +107,38 @@
                 </div>
             </div>
 
+            {{-- MAP PIN --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">📍 Location Coordinates</div>
+                <div class="section-title">📍 Property Location on Map</div>
+                <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
+                    Click anywhere on the map to pin your property location. Coordinates will fill automatically.
+                </p>
+
+                <div id="pinMap" style="height:300px; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:16px; cursor:crosshair;"></div>
+
+                <div style="background:#f0faf5; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:var(--primary);" id="pinStatus">
+                    📍 Click on the map above to update the property location
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Latitude</label>
-                        <input type="text" name="latitude" class="form-control" value="{{ old('latitude', $property->latitude) }}" placeholder="e.g. -1.3978">
+                        <label>Latitude (auto-filled)</label>
+                        <input type="text" name="latitude" id="latInput" class="form-control"
+                            placeholder="Click map to set"
+                            value="{{ old('latitude', $property->latitude) }}"
+                            readonly style="background:#f8f9fa;">
                     </div>
                     <div class="form-group">
-                        <label>Longitude</label>
-                        <input type="text" name="longitude" class="form-control" value="{{ old('longitude', $property->longitude) }}" placeholder="e.g. 36.7565">
+                        <label>Longitude (auto-filled)</label>
+                        <input type="text" name="longitude" id="lngInput" class="form-control"
+                            placeholder="Click map to set"
+                            value="{{ old('longitude', $property->longitude) }}"
+                            readonly style="background:#f8f9fa;">
                     </div>
                 </div>
             </div>
 
+            {{-- AMENITIES --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div class="section-title">✅ Amenities</div>
                 <div class="amenity-grid">
@@ -127,6 +152,7 @@
                 </div>
             </div>
 
+            {{-- COVER IMAGE --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div class="section-title">📸 Cover Image</div>
                 @if($property->cover_image)
@@ -143,5 +169,60 @@
         </form>
     </main>
 </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const existingLat = {{ $property->latitude ?? '-1.3978' }};
+    const existingLng = {{ $property->longitude ?? '36.7565' }};
+    const hasCoords   = {{ $property->latitude ? 'true' : 'false' }};
+
+    const pinMap = L.map('pinMap').setView([existingLat, existingLng], hasCoords ? 16 : 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(pinMap);
+
+    let marker = null;
+
+    // If property already has coordinates show existing marker
+    if (hasCoords) {
+        const icon = L.divIcon({
+            html: '<div style="background:#1E7A5A; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Current Location</div>',
+            className: '',
+            iconAnchor: [0, 0]
+        });
+        marker = L.marker([existingLat, existingLng], {icon}).addTo(pinMap);
+
+        const status = document.getElementById('pinStatus');
+        status.innerHTML = `✅ Current location: <strong>${existingLat}, ${existingLng}</strong>. Click map to change.`;
+        status.style.background = '#d1fae5';
+        status.style.color = '#065f46';
+    }
+
+    pinMap.on('click', function(e) {
+        const lat = e.latlng.lat.toFixed(7);
+        const lng = e.latlng.lng.toFixed(7);
+
+        if (marker) pinMap.removeLayer(marker);
+
+        const icon = L.divIcon({
+            html: '<div style="background:#1E7A5A; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Your Property</div>',
+            className: '',
+            iconAnchor: [0, 0]
+        });
+
+        marker = L.marker([lat, lng], {icon}).addTo(pinMap);
+
+        document.getElementById('latInput').value = lat;
+        document.getElementById('lngInput').value = lng;
+
+        const status = document.getElementById('pinStatus');
+        status.innerHTML = `✅ Location updated to <strong>${lat}, ${lng}</strong>. Click again to change.`;
+        status.style.background = '#d1fae5';
+        status.style.color = '#065f46';
+    });
+});
+</script>
 </body>
 </html>
