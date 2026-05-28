@@ -1,26 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>HomeFinder - Landlord Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Login - HomeFinder</title>
+    <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+    <style>
+        body { background: linear-gradient(135deg, #f0faf5 0%, #e8f5e9 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .auth-card { background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); width:100%; max-width:440px; padding:40px; }
+        .auth-logo { text-align:center; margin-bottom:28px; }
+        .auth-logo h1 { font-size:28px; font-weight:800; color:var(--primary); }
+        .auth-logo h1 span { color:var(--text); }
+        .form-group { margin-bottom:18px; }
+        .form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+        .form-control { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; font-family:inherit; }
+        .form-control:focus { border-color:var(--primary); }
+        .btn-block { width:100%; padding:13px; font-size:15px; margin-top:8px; }
+        .auth-links { text-align:center; font-size:14px; color:var(--gray); margin-top:20px; }
+        .auth-links a { color:var(--primary); font-weight:600; }
+        .role-tabs { display:flex; gap:8px; margin-bottom:24px; }
+        .role-tab { flex:1; padding:10px; border:2px solid var(--border); border-radius:8px; text-align:center; font-size:13px; font-weight:600; cursor:pointer; color:var(--gray); text-decoration:none; transition:all 0.2s; }
+        .role-tab.active { border-color:var(--primary); color:var(--primary); background:#f0faf5; }
+    </style>
 </head>
 <body>
-    <h2>Landlord Login</h2>
+<div class="auth-card">
+    <div class="auth-logo">
+        <h1>🏠 Home<span>Finder</span></h1>
+        <p style="color:var(--gray); font-size:14px;">Landlord & Agent Portal</p>
+    </div>
+
+    <div class="role-tabs">
+        <a href="/login" class="role-tab">🏠 I'm a Tenant</a>
+        <a href="/landlord/login" class="role-tab active">🏢 I'm a Landlord</a>
+    </div>
+
+    <div style="font-size:22px; font-weight:700; margin-bottom:6px;">Welcome Back!</div>
+    <p style="color:var(--gray); font-size:14px; margin-bottom:28px;">Login to manage your listings</p>
 
     @if(session('success'))
-        <p style="color:green">{{ session('success') }}</p>
+        <div class="alert alert-success" style="margin-bottom:16px;">{{ session('success') }}</div>
     @endif
-
     @if(session('error'))
-        <p style="color:red">{{ session('error') }}</p>
+        <div class="alert alert-error" style="margin-bottom:16px;">{{ session('error') }}</div>
     @endif
 
     <form method="POST" action="/landlord/login">
         @csrf
-        <input type="email" name="email" placeholder="Email" required><br><br>
-        <input type="password" name="password" placeholder="Password" required><br><br>
-        <button type="submit">Login</button>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" class="form-control" placeholder="you@example.com" value="{{ old('email') }}" required autofocus>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <input type="checkbox" name="remember" id="remember" style="accent-color:var(--primary); width:16px; height:16px;">
+            <label for="remember" style="font-size:13px; color:var(--gray); cursor:pointer;">Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login →</button>
     </form>
 
-    <p>No account? <a href="/landlord/register">Register here</a></p>
+    <div class="auth-links">
+        No account? <a href="/landlord/register">Register as Landlord</a>
+    </div>
+</div>
 </body>
 </html>
