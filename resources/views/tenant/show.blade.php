@@ -214,31 +214,61 @@
             </div>
 
             <!-- REPORT LISTING -->
+          <!-- REPORT LISTING -->
             @auth
-            <div style="margin-top:16px; text-align:center;">
-                <button onclick="document.getElementById('reportForm').style.display='block'; this.style.display='none';"
-                    style="background:none; border:none; color:var(--gray); font-size:13px; cursor:pointer; text-decoration:underline;">
-                    🚩 Report this listing
-                </button>
+                <div style="margin-top:20px; background:#fff8f8; border:1px solid #fecaca; border-radius:10px; padding:16px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <div>
+                            <p style="font-size:13px; font-weight:600; color:#991b1b; margin-bottom:2px;">🚩 Report this Listing</p>
+                            <p style="font-size:12px; color:var(--gray);">Seen something suspicious? Let us know.</p>
+                        </div>
+                        <button onclick="toggleReport()"
+                            id="reportToggleBtn"
+                            style="background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">
+                            Report
+                        </button>
+                    </div>
 
-                <div id="reportForm" style="display:none; margin-top:12px; background:#fff5f5; border:1px solid #fca5a5; border-radius:10px; padding:16px;">
-                    <p style="font-size:13px; font-weight:600; color:#991b1b; margin-bottom:12px;">Report this listing</p>
-                    <form method="POST" action="{{ route('tenant.report', $property) }}">
-                        @csrf
-                        <select name="reason" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; margin-bottom:10px; outline:none;" required>
-                            <option value="">Select reason...</option>
-                            <option value="Fake Listing">Fake Listing</option>
-                            <option value="Wrong Information">Wrong Information</option>
-                            <option value="Already Rented">Already Rented</option>
-                            <option value="Scam/Fraud">Scam/Fraud</option>
-                            <option value="Duplicate Listing">Duplicate Listing</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <textarea name="description" placeholder="Describe the issue (optional)..." style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; resize:none; min-height:70px; outline:none; margin-bottom:10px;"></textarea>
-                        <button type="submit" class="btn btn-danger" style="width:100%; font-size:13px;">Submit Report</button>
-                    </form>
+                    <div id="reportFormContainer" style="display:none; margin-top:16px; border-top:1px solid #fecaca; padding-top:16px;">
+                        @if(session('success') && str_contains(session('success'), 'Report'))
+                            <div style="background:#d1fae5; color:#065f46; padding:10px; border-radius:8px; font-size:13px; margin-bottom:12px;">{{ session('success') }}</div>
+                        @endif
+                        <form method="POST" action="{{ route('tenant.report', $property) }}">
+                            @csrf
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Reason *</label>
+                                <select name="reason"
+                                    style="width:100%; padding:10px; border:1px solid #fca5a5; border-radius:8px; font-size:13px; outline:none; background:white;"
+                                    required>
+                                    <option value="">Select a reason...</option>
+                                    <option value="Fake Listing">🚫 Fake Listing</option>
+                                    <option value="Wrong Information">❌ Wrong Information</option>
+                                    <option value="Already Rented">🔒 Already Rented</option>
+                                    <option value="Scam/Fraud">⚠️ Scam / Fraud</option>
+                                    <option value="Duplicate Listing">📋 Duplicate Listing</option>
+                                    <option value="Misleading Photos">📷 Misleading Photos</option>
+                                    <option value="Other">💬 Other</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom:12px;">
+                                <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Description <span style="font-weight:400; color:var(--gray);">(optional)</span></label>
+                                <textarea name="description"
+                                    placeholder="Describe the issue in detail..."
+                                    style="width:100%; padding:10px; border:1px solid #fca5a5; border-radius:8px; font-size:13px; resize:none; min-height:80px; outline:none; font-family:inherit;"></textarea>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button type="submit"
+                                    style="flex:1; background:#ef4444; color:white; border:none; padding:10px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">
+                                    🚩 Submit Report
+                                </button>
+                                <button type="button" onclick="toggleReport()"
+                                    style="background:var(--background); border:1px solid var(--border); padding:10px 16px; border-radius:8px; font-size:13px; cursor:pointer;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
             @endauth
         </div>
     </div>
@@ -402,5 +432,14 @@ function getRoute(fromLat, fromLng, toLat, toLng) {
 }
 
 @endif
+
+function toggleReport() {
+    const container = document.getElementById('reportFormContainer');
+    const btn       = document.getElementById('reportToggleBtn');
+    const isHidden  = container.style.display === 'none';
+    container.style.display = isHidden ? 'block' : 'none';
+    btn.textContent         = isHidden ? 'Cancel' : 'Report';
+    btn.style.background    = isHidden ? '#6b7280' : '#ef4444';
+}
 </script>
 @endsection
