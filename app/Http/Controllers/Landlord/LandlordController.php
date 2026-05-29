@@ -298,4 +298,44 @@ class LandlordController extends Controller
 
         return back()->with('success', 'Reply sent!');
     }
+
+    // Show Profile
+    public function profile()
+    {
+        $landlord = Auth::guard('landlord')->user();
+        $data = [
+            'totalProperties' => Property::where('landlord_id', $landlord->id)->count(),
+            'approved'        => Property::where('landlord_id', $landlord->id)->where('status', 'approved')->count(),
+            'totalBookings'   => Booking::whereHas('property', function($q) use ($landlord) {
+                                    $q->where('landlord_id', $landlord->id);
+                                })->count(),
+        ];
+        return view('landlord.profile', $data);
+    }
+
+    // Update Profile
+    public function updateProfile(Request $request)
+    {
+        $landlord = Auth::guard('landlord')->user();
+
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'phone'    => 'nullable|string|max:20',
+            'email'    => 'required|email|unique:landlords,email,'.$landlord->id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        $landlord->name      = $request->name;
+        $landlord->phone     = $request->phone;
+        $landlord->email     = $request->email;
+        $landlord->id_number = $request->id_number;
+
+        if ($request->filled('password')) {
+            $landlord->password = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        $landlord->save();
+
+        return back()->with('success', 'Profile updated successfully!');
+    }
 }

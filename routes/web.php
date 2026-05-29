@@ -63,6 +63,8 @@ Route::middleware(['isLandlord'])->prefix('landlord')->group(function () {
     Route::delete('/properties/{property}', [LandlordController::class, 'destroy'])->name('landlord.properties.destroy');
     Route::get('/bookings', [LandlordController::class, 'bookings'])->name('landlord.bookings');
     Route::post('/bookings/{booking}', [LandlordController::class, 'updateBooking'])->name('landlord.bookings.update');
+    Route::get('/profile', [LandlordController::class, 'profile'])->name('landlord.profile');
+    Route::put('/profile', [LandlordController::class, 'updateProfile'])->name('landlord.profile.update');
 
     // Messages 
     Route::get('/messages', [LandlordController::class, 'messages'])->name('landlord.messages');

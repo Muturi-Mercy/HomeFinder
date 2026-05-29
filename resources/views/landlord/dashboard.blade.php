@@ -16,6 +16,7 @@
             <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
             <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
             <li><a href="{{ route('landlord.messages') }}"><span class="icon">💬</span> Messages</a></li>
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
         </ul>
         <div style="padding:24px; margin-top:auto;">
             <form method="POST" action="{{ route('landlord.logout') }}">

@@ -16,6 +16,7 @@
             <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
             <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
             <li><a href="{{ route('landlord.messages') }}" class="active"><span class="icon">💬</span> Messages
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
                 @if($unreadCount > 0)
                     <span style="background:#ef4444; color:white; font-size:11px; padding:2px 7px; border-radius:20px; margin-left:4px;">{{ $unreadCount }}</span>
                 @endif
