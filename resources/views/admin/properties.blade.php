@@ -37,6 +37,7 @@
                         <th>Type</th>
                         <th>Status</th>
                         <th>Action</th>
+                        <th>Reviews</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +64,17 @@
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger">🗑 Delete</button>
                             </form>
+                        </td>
+                        <td style="color:var(--gray);">
+                            @php $rc = $property->reviews()->count(); @endphp
+                            @if($rc > 0)
+                                <span style="color:#f59e0b; font-weight:600;">
+                                    ★ {{ round($property->averageRating(), 1) }}
+                                </span>
+                                <span style="font-size:12px; color:var(--gray);"> ({{ $rc }})</span>
+                            @else
+                                <span style="color:var(--gray); font-size:12px;">No reviews</span>
+                            @endif
                         </td>
                     </tr>
                     @empty

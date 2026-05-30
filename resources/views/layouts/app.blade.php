@@ -6,19 +6,29 @@
     <title>@yield('title', 'HomeFinder - Find Your Perfect Rental Home')</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     @yield('styles')
+    <link rel="shortcut icon" href="{{ asset('img/logohf.png') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar">
+    
     <a href="/" class="navbar-brand">
-        🏠 Home<span>Finder</span>
+        <img src="{{ asset('img/logohf.png') }}" alt="HomeFinder Logo" class="logo">
+        Home<span>Finder</span>
     </a>
     <div class="nav-links">
         <a href="/">Home</a>
         <a href="/browse">Browse Houses</a>
-        <a href="#how-it-works">How It Works</a>
+        <a href="/#how-it-works">How It Works</a>
         <a href="#contact">Contact</a>
     </div>
     <div style="display:flex; gap:12px; align-items:center;">
@@ -56,7 +66,9 @@
 <footer class="footer" id="contact">
     <div class="footer-grid">
         <div>
-            <div class="footer-brand">Home<span>Finder</span></div>
+            <div class="footer-brand">
+                 {{-- <img src="{{ asset('img/logowh.png') }}" alt="HomeFinder Logo" class="logo"> --}}
+                Home<span>Finder</span></div>
             <p style="font-size:14px; line-height:1.7;">Connecting landlords and tenants seamlessly in Ongata Rongai and surrounding areas.</p>
         </div>
         <div>
@@ -80,7 +92,7 @@
             <ul>
                 <li><a href="#">Ongata Rongai, Nairobi</a></li>
                 <li><a href="#">info@homefinder.co.ke</a></li>
-                <li><a href="#">+254 700 123 456</a></li>
+                <li><a href="#">+254 708 771 898</a></li>
             </ul>
         </div>
     </div>

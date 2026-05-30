@@ -20,7 +20,10 @@
 
                 <!-- LOCATION -->
                 <div class="filter-group">
-                    <label>📍 Location</label>
+                    <label>
+                        <i class="fa-solid fa-location-dot" style="color: rgba(230, 57, 70, 1); margin-right:6px;"></i>
+                        Location
+                    </label>
                     <input type="text"
                         name="location"
                         placeholder="e.g. Rongai Town"
@@ -30,7 +33,11 @@
 
                 <!-- PRICE RANGE -->
                 <div class="filter-group">
-                    <label>💰 Max Price: <strong id="priceDisplay">KSh {{ number_format(request('max_price', 100000)) }}</strong></label>
+                    <label>
+                        <i class="fa-solid fa-sack-dollar" style="color: rgba(34, 197, 94, 1); margin-right:6px;"></i>
+                        Max Price:
+                        <strong id="priceDisplay">KSh {{ number_format(request('max_price', 100000)) }}</strong>
+                    </label>
                     <input type="range"
                         name="max_price"
                         min="3000"
@@ -46,7 +53,10 @@
 
                 <!-- PROPERTY TYPE -->
                 <div class="filter-group">
-                    <label>🏠 Property Type</label>
+                     <label>
+                        <i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i>
+                        Property Type
+                    </label>
                     <div class="checkbox-group">
                         <label>
                             <input type="radio" name="type" value="" {{ !request('type') ? 'checked' : '' }}> All Types
@@ -62,7 +72,10 @@
 
                 <!-- BEDROOMS -->
                 <div class="filter-group">
-                    <label>🛏 Bedrooms</label>
+                    <label>
+                        <i class="fa-solid fa-bed" style="color: rgba(37, 99, 235, 1); margin-right:6px;"></i>
+                        Bedrooms
+                    </label>
                     <select name="bedrooms" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; outline:none; background:white;">
                         <option value="">Any</option>
                         <option value="1" {{ request('bedrooms') == '1' ? 'selected' : '' }}>1 Bedroom</option>
@@ -73,7 +86,10 @@
 
                 <!-- FURNISHED -->
                 <div class="filter-group">
-                    <label>✨ Condition</label>
+                <label>
+                    <i class="fa-solid fa-couch" style="color: rgba(168, 85, 247, 1); margin-right:6px;"></i>
+                    Condition
+                </label>
                     <div class="checkbox-group">
                         <label>
                             <input type="checkbox" name="furnished" value="1" {{ request('furnished') ? 'checked' : '' }}>
@@ -84,20 +100,24 @@
 
                 <!-- AMENITIES -->
                 <div class="filter-group">
-                    <label>🏷️ Amenities</label>
+                <label>
+                    <i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1); margin-right:6px;"></i>
+                    Amenities
+                </label>
                     <div class="checkbox-group">
                         @foreach($amenities as $amenity)
                         <label>
                             <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}"
                                 {{ in_array($amenity->id, request('amenities', [])) ? 'checked' : '' }}>
-                            {{ $amenity->icon }} {{ $amenity->name }}
+                           <i class="{{ $amenity->icon }}" style="color:{{ $amenity->color }};"></i> {{ $amenity->name }}
                         </label>
                         @endforeach
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width:100%; padding:12px;">
-                    🔍 Apply Filters
+                    <i class="fa-solid fa-magnifying-glass" style="margin-right:8px;"></i>
+                    Apply Filters
                 </button>
             </form>
         </div>
@@ -121,16 +141,18 @@
                 <input type="hidden" name="user_lat" id="browseUserLat" value="{{ request('user_lat') }}">
                 <input type="hidden" name="user_lng" id="browseUserLng" value="{{ request('user_lng') }}">
                 <input type="hidden" name="sort" id="browseSort" value="{{ request('sort', 'newest') }}">
+                
                 <input type="text"
                     name="location"
                     id="browseLocationInput"
-                    placeholder="🔍 Search by location..."
+                    placeholder=" Search by location..."
                     value="{{ request('location') }}"
                     style="flex:1; min-width:200px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none;">
                 <button type="submit" class="btn btn-primary">Search</button>
-                <button type="button" onclick="browseNearMe()" id="browseNearMeBtn"
-                    style="background:var(--accent); color:white; border:none; padding:10px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;">
-                    🎯 Near Me
+               <button type="button" onclick="browseNearMe()" id="browseNearMeBtn"
+                    style="background:rgba(37, 99, 235, 1); color:white; border:none; padding:10px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;">
+                    <i class="fa-solid fa-location-crosshairs" style="margin-right:8px;"></i>
+                    Near Me
                 </button>
             </form>
         </div>
@@ -138,7 +160,8 @@
         <!-- NEAR ME BANNER -->
         @if(request('user_lat') && request('user_lng') && request('sort') === 'nearest')
         <div style="background:#dbeafe; color:#1e40af; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-            🎯 Showing listings sorted by distance from your location.
+            <i class="fa-solid fa-location-crosshairs" style="color: rgba(37, 99, 235, 1);"></i>
+                Showing listings sorted by distance from your location.
             <a href="/browse" style="margin-left:auto; color:#1e40af; font-size:12px; text-decoration:underline; white-space:nowrap;">Clear</a>
         </div>
         @endif
@@ -155,7 +178,8 @@
                     </p>
                 @elseif(request('user_lat') && request('sort') === 'nearest')
                     <p style="font-size:13px; color:var(--gray); margin-top:2px;">
-                        📍 Sorted by distance from your location
+                        <i class="fa-solid fa-location-dot" style="color: rgba(230, 57, 70, 1); margin-right:6px;"></i>
+                        Sorted by distance from your location
                     </p>
                 @endif
             </div>
@@ -177,7 +201,7 @@
                     <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                     <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
                     @if(request('user_lat') && request('user_lng'))
-                    <option value="nearest" {{ request('sort') === 'nearest' ? 'selected' : '' }}>📍 Nearest to Me</option>
+                    <option value="nearest" {{ request('sort') === 'nearest' ? 'selected' : '' }}> Nearest to Me</option>
                     @endif
                 </select>
             </form>
@@ -186,7 +210,8 @@
                 id="mapToggleBtn"
                 class="btn btn-outline"
                 style="white-space:nowrap;">
-                🗺️ Map View
+                <i class="fa-solid fa-map-location-dot" style="margin-right:8px; color: #34a853;"></i>
+                Map View
             </button>
         </div>
 
@@ -200,23 +225,23 @@
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
             @if(request('location'))
                 <span style="background:#dbeafe; color:#1e40af; padding:4px 12px; border-radius:20px; font-size:13px;">
-                    📍 {{ request('location') }}
-                    <a href="{{ url('/browse?'.http_build_query(request()->except('location'))) }}" style="margin-left:6px; color:#1e40af;">×</a>
+                    <i class="fa-solid fa-location-dot" style="margin-right:6px; color: rgba(230,57,70,1);"></i> {{ request('location') }}
+                    <a href="{{ url('/browse?'.http_build_query(request()->except('location'))) }}" style="margin-left:6px; color:#1e40af;"><i class="fa-solid fa-x"></i></a>
                 </span>
             @endif
             @if(request('type'))
                 <span style="background:#d1fae5; color:#065f46; padding:4px 12px; border-radius:20px; font-size:13px;">
-                    🏠 {{ str_replace('_',' ', ucfirst(request('type'))) }}
+                    <i class="fa-solid fa-house" style="margin-right:6px; color: rgba(245,158,11,1);"></i> {{ str_replace('_',' ', ucfirst(request('type'))) }}
                 </span>
             @endif
             @if(request('max_price') && request('max_price') < 100000)
                 <span style="background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:20px; font-size:13px;">
-                    💰 Max KSh {{ number_format(request('max_price')) }}
+                    <i class="fa-solid fa-money-bill-wave" style="margin-right:6px; color: rgba(34,197,94,1);"></i> Max KSh {{ number_format(request('max_price')) }}
                 </span>
             @endif
             @if(request('furnished'))
                 <span style="background:#ede9fe; color:#5b21b6; padding:4px 12px; border-radius:20px; font-size:13px;">
-                    ✨ Furnished
+                    <i class="fa-solid fa-money-bill-wave" style="margin-right:6px; color: rgba(34,197,94,1);"></i>Furnished
                 </span>
             @endif
         </div>
@@ -229,7 +254,9 @@
         <!-- PROPERTY GRID -->
         @if($properties->count() === 0)
             <div style="text-align:center; padding:80px 20px; background:white; border-radius:10px; box-shadow:var(--shadow);">
-                <div style="font-size:56px; margin-bottom:16px;">🏠</div>
+                <div style="font-size:56px; color: rgba(37, 99, 235, 1);">
+                    <i class="fa-solid fa-house-circle-xmark"></i>
+                </div>
                 <h3 style="font-size:20px; font-weight:700;">No properties found</h3>
                 <p style="color:var(--gray); margin-top:8px; font-size:15px;">Try adjusting your filters or search in a different location.</p>
                 <a href="/browse" class="btn btn-primary" style="margin-top:20px; display:inline-block;">Clear All Filters</a>
@@ -255,27 +282,56 @@
                                 $dist = round($R * 2 * atan2(sqrt($a), sqrt(1-$a)), 1);
                             @endphp
                             <span style="background:#dbeafe; color:#1e40af; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:6px;">
-                                📍 {{ $dist }} km away
+                                <i class="fa-solid fa-location-dot" style="margin-right:5px;"></i>
+                                {{ $dist }} km away {{ $dist }} km away
                             </span>
                         @endif
 
                         @if($property->is_featured)
-                            <span class="property-badge">⭐ Featured</span>
+                            <span class="property-badge"><i class="fa-solid fa-star" style="margin-right:5px;"></i>
+                                Featured</span>
                         @endif
+
                         <div class="property-title">{{ $property->title }}</div>
-                        <div class="property-location">📍 {{ $property->location }}</div>
+                        <div class="property-location"><i class="fa-solid fa-location-dot" style="color: rgba(230,57,70,1); margin-right:6px;"></i>
+                            {{ $property->location }} {{ $property->location }}</div>
+
+                        {{-- STAR RATING --}}
+                        @php
+                            $avgRating   = $property->reviews()->avg('rating');
+                            $reviewCount = $property->reviews()->count();
+                        @endphp
+                        @if($reviewCount > 0)
+                            <div style="display:flex; align-items:center; gap:5px; margin-bottom:8px;">
+                                <div style="display:flex; gap:1px;">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <span style="font-size:13px; color:{{ $i <= round($avgRating) ? '#f59e0b' : '#d1d5db' }};"><i class="fa-solid fa-star" style="margin-right:5px;"></i></span>
+                                    @endfor
+                                </div>
+                                <span style="font-size:13px; font-weight:600; color:#f59e0b;">{{ round($avgRating, 1) }}</span>
+                                <span style="font-size:12px; color:var(--gray);">({{ $reviewCount }} {{ Str::plural('review', $reviewCount) }})</span>
+                            </div>
+                        @else
+                            <div style="font-size:12px; color:var(--gray); margin-bottom:8px;">
+                                <i class="fa-regular fa-star" style="color: rgba(156,163,175,1); margin-right:6px;"></i> No reviews yet
+                            </div>
+                        @endif
+
                         <div class="property-price">
                             KSh {{ number_format($property->price) }}
                             <span>/ month</span>
                         </div>
                         <div class="property-features">
-                            <span>🛏 {{ $property->bedrooms }} Bed</span>
-                            <span>🚿 {{ $property->bathrooms }} Bath</span>
+                            <span><i class="fa-solid fa-star" style="margin-right:5px;"></i>
+                                Featured {{ $property->bedrooms }} <i class="fa-solid fa-bed" style="color: rgba(37,99,235,1);"></i>Bed</span>
+                            <span> {{ $property->bathrooms }} <i class="fa-solid fa-bath" style="color: rgba(14, 165, 233, 1);"></i> Bath</span>
                             @if($property->is_furnished)
-                                <span>🛋 Furnished</span>
+                                <span><i class="fa-solid fa-couch" style="color: rgba(168,85,247,1);"></i> Furnished</span>
                             @endif
                             @foreach($property->amenities->take(2) as $amenity)
-                                <span>{{ $amenity->icon }} {{ $amenity->name }}</span>
+                                <span>
+                                <i class="{{ $amenity->icon }}" style="color:{{ $amenity->color }};"></i> {{ $amenity->name }}
+                                </span>
                             @endforeach
                         </div>
                     </div>
@@ -307,27 +363,27 @@ if (slider) {
 // Near Me button on browse page
 function browseNearMe() {
     const btn = document.getElementById('browseNearMeBtn');
-    btn.textContent = '⏳ Getting location...';
+    btn.textContent = 'Getting location...';
     btn.disabled    = true;
 
     if (!navigator.geolocation) {
         alert('Geolocation not supported by your browser.');
-        btn.textContent = '🎯 Near Me';
+        btn.textContent = 'Near Me';
         btn.disabled    = false;
         return;
     }
 
     navigator.geolocation.getCurrentPosition(
         function(position) {
-            document.getElementById('browseUserLat').value    = position.coords.latitude;
-            document.getElementById('browseUserLng').value    = position.coords.longitude;
-            document.getElementById('browseSort').value       = 'nearest';
+            document.getElementById('browseUserLat').value      = position.coords.latitude;
+            document.getElementById('browseUserLng').value      = position.coords.longitude;
+            document.getElementById('browseSort').value         = 'nearest';
             document.getElementById('browseLocationInput').value = '';
             document.getElementById('browseSearchForm').submit();
         },
         function(error) {
             alert('Could not get your location. Please allow location access.');
-            btn.textContent = '🎯 Near Me';
+            btn.textContent = 'Near Me';
             btn.disabled    = false;
         }
     );
@@ -338,7 +394,6 @@ document.getElementById('browseSearchForm').addEventListener('submit', function(
     const locationInput = document.getElementById('browseLocationInput').value.trim();
     const userLat       = document.getElementById('browseUserLat').value;
 
-    // If GPS already set just submit
     if (userLat) return;
 
     if (locationInput) {
@@ -412,7 +467,7 @@ function toggleMapView() {
                     .bindPopup(`
                         <div style="min-width:200px;">
                             <strong style="font-size:14px;">${prop.title}</strong><br>
-                            <span style="color:#6c757d; font-size:13px;">📍 ${prop.location}</span><br>
+                            <span style="color:#6c757d; font-size:13px;"> ${prop.location}</span><br>
                             <span style="color:#1E7A5A; font-weight:700; font-size:15px;">KSh ${prop.price}/mo</span><br>
                             <span style="font-size:12px;">🛏 ${prop.beds} bed • ${prop.type}</span><br>
                             <a href="${prop.url}" style="display:inline-block; margin-top:8px; background:#1E7A5A; color:white; padding:6px 14px; border-radius:6px; font-size:12px; text-decoration:none;">View Details →</a>
@@ -428,7 +483,7 @@ function toggleMapView() {
 
     } else {
         container.style.display = 'none';
-        btn.textContent         = '🗺️ Map View';
+        btn.textContent         = 'Map View';
         btn.style.background    = 'transparent';
         btn.style.color         = 'var(--primary)';
     }

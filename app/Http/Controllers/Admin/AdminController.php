@@ -161,4 +161,11 @@ class AdminController extends Controller
     {
         return view('admin.settings');
     }
+
+    // Delete Review
+    public function deleteReview(\App\Models\Review $review)
+    {
+        $review->delete();
+        return back()->with('success', 'Review deleted.');
+    }
 }

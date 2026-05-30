@@ -5,7 +5,7 @@
 <div style="max-width:1100px; margin:0 auto; padding:32px 24px;">
 
     <!-- BACK BUTTON -->
-    <a href="/browse" style="display:inline-flex; align-items:center; gap:6px; color:var(--gray); font-size:14px; margin-bottom:20px;">← Back to Search</a>
+    <a href="/browse" style="display:inline-flex; align-items:center; gap:6px; color:var(--gray); font-size:18px; margin-bottom:20px;"><i class="fa-solid fa-angles-left"; style="color:#1e7a5a"></i>Back to Search</a>
 
     <div style="display:grid; grid-template-columns:1fr 340px; gap:28px;">
 
@@ -16,7 +16,7 @@
                 @if($property->cover_image)
                     <img src="{{ asset('storage/'.$property->cover_image) }}" alt="{{ $property->title }}" style="width:100%; height:420px; object-fit:cover;">
                 @else
-                    <div style="width:100%; height:420px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:64px;">🏠</div>
+                    <div style="width:100%; height:420px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:64px;"><img src="{{ asset('img/logohf.png') }}" alt="HomeFinder Logo" class="logo"></div>
                 @endif
             </div>
 
@@ -33,8 +33,24 @@
             <div style="background:white; border-radius:12px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
                     <div>
-                        <h1 style="font-size:24px; font-weight:700; margin-bottom:8px;">{{ $property->title }}</h1>
-                        <p style="color:var(--gray); font-size:15px;">📍 {{ $property->location }}</p>
+                            <h1 style="font-size:24px; font-weight:700; margin-bottom:8px;">{{ $property->title }}</h1>
+                            <p style="color:var(--gray); font-size:15px;"><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> {{ $property->location }}</p>
+                            {{-- Rating summary --}}
+                            @php
+                                $avgRating   = $property->averageRating();
+                                $reviewCount = $property->reviewCount();
+                            @endphp
+                            @if($reviewCount > 0)
+                                <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+                                    <div style="display:flex; gap:2px;">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <span style="font-size:18px; color:{{ $i <= round($avgRating) ? '#f59e0b' : '#d1d5db' }};">★</span>
+                                        @endfor
+                                    </div>
+                                    <span style="font-size:16px; font-weight:700; color:#f59e0b;">{{ round($avgRating, 1) }}</span>
+                                    <span style="font-size:13px; color:var(--gray);">({{ $reviewCount }} {{ Str::plural('review', $reviewCount) }})</span>
+                                </div>
+                            @endif
                     </div>
                     <span style="background:#d1fae5; color:#065f46; padding:4px 14px; border-radius:20px; font-size:13px; font-weight:600;">✓ Verified</span>
                 </div>
@@ -46,23 +62,23 @@
                 <!-- FEATURES -->
                 <div style="display:flex; gap:24px; padding:20px; background:var(--background); border-radius:10px; margin-bottom:24px; flex-wrap:wrap;">
                     <div style="text-align:center;">
-                        <div style="font-size:24px;">🛏</div>
+                        <div style="font-size:24px;"><i class="fa-solid fa-bed" style="color: rgba(37, 99, 235, 1);"></i></div>
                         <div style="font-size:16px; font-weight:700;">{{ $property->bedrooms }}</div>
                         <div style="font-size:12px; color:var(--gray);">Bedrooms</div>
                     </div>
                     <div style="text-align:center;">
-                        <div style="font-size:24px;">🚿</div>
+                        <div style="font-size:24px;"><i class="fa-solid fa-bath" style="color: rgba(14, 165, 233, 1);"></i></div>
                         <div style="font-size:16px; font-weight:700;">{{ $property->bathrooms }}</div>
                         <div style="font-size:12px; color:var(--gray);">Bathrooms</div>
                     </div>
                     <div style="text-align:center;">
-                        <div style="font-size:24px;">🏠</div>
+                        <div style="font-size:24px;"><i class="fa-solid fa-house" style="color: #1e7a5a"></i></div>
                         <div style="font-size:16px; font-weight:700;">{{ str_replace('_',' ', ucfirst($property->property_type)) }}</div>
                         <div style="font-size:12px; color:var(--gray);">Type</div>
                     </div>
                     @if($property->is_furnished)
                     <div style="text-align:center;">
-                        <div style="font-size:24px;">🛋</div>
+                        <div style="font-size:24px;"><i class="fa-solid fa-couch" style="color: rgba(168,85,247,1);"></i></div>
                         <div style="font-size:16px; font-weight:700;">Yes</div>
                         <div style="font-size:12px; color:var(--gray);">Furnished</div>
                     </div>
@@ -74,13 +90,25 @@
                 <p style="color:var(--gray); line-height:1.8; font-size:15px;">{{ $property->description }}</p>
 
                 <!-- AMENITIES -->
-                @if($property->amenities->count() > 0)
-                <h3 style="font-size:17px; font-weight:700; margin:24px 0 12px;">Amenities</h3>
-                <div style="display:flex; flex-wrap:wrap; gap:10px;">
-                    @foreach($property->amenities as $amenity)
-                    <span style="background:var(--background); padding:8px 16px; border-radius:20px; font-size:13px;">{{ $amenity->icon }} {{ $amenity->name }}</span>
-                    @endforeach
-                </div>
+               @if($property->amenities->count() > 0)
+                    <h3 style="font-size:17px; font-weight:700; margin:24px 0 12px;">Amenities</h3>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                        @foreach($property->amenities as $amenity)
+                            <span style="
+                                background:{{ $amenity->color }}15;
+                                border:1px solid {{ $amenity->color }}40;
+                                padding:8px 16px;
+                                border-radius:20px;
+                                font-size:13px;
+                                font-weight:500;
+                                display:inline-flex;
+                                align-items:center;
+                                gap:8px;">
+                                <i class="{{ $amenity->icon }}" style="color:{{ $amenity->color }}; font-size:14px;"></i>
+                                {{ $amenity->name }}
+                            </span>
+                        @endforeach
+                    </div>
                 @endif
             </div>
         </div>
@@ -88,10 +116,10 @@
         <!-- MAP SECTION -->
         @if($property->latitude && $property->longitude)
         <div style="background:white; border-radius:12px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-            <h3 style="font-size:17px; font-weight:700; margin-bottom:16px;">📍 Property Location</h3>
+            <h3 style="font-size:17px; font-weight:700; margin-bottom:16px;"><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Property Location</h3>
 
             <!-- MAP CONTAINER -->
-            <div id="propertyMap" style="height:350px; border-radius:10px; overflow:hidden; border:1px solid var(--border);"></div>
+            <div id="propertyMap" style="height:350px; border-radius:10px; overflow:hidden; border:1px solid var(--border); z-index:1; position:relative;"></div>
 
             <!-- ROUTE INFO -->
             <div id="routeInfo" style="display:none; margin-top:16px; padding:16px; background:var(--background); border-radius:10px;">
@@ -113,18 +141,18 @@
             <!-- BUTTONS -->
             <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
                 <button onclick="getMyLocation()" class="btn btn-primary">
-                    📍 Show Route From My Location
+                    <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Show Route From My Location
                 </button>
                 <a href="https://www.google.com/maps/dir/?api=1&destination={{ $property->latitude }},{{ $property->longitude }}"
                     target="_blank" class="btn btn-outline">
-                    🗺️ Open in Google Maps
+                    <i class="fa-solid fa-map-location-dot" style="margin-right:8px; color: #34a853;"></i> Open in Google Maps
                 </a>
             </div>
         </div>
         @else
         <div style="background:white; border-radius:12px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-            <h3 style="font-size:17px; font-weight:700; margin-bottom:12px;">📍 Property Location</h3>
-            <p style="color:var(--gray); font-size:14px;">📍 {{ $property->location }}</p>
+            <h3 style="font-size:17px; font-weight:700; margin-bottom:12px;"><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Property Location</h3>
+            <p style="color:var(--gray); font-size:14px;"><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> {{ $property->location }}</p>
             <p style="color:var(--gray); font-size:13px; margin-top:8px;">Exact map location not available for this property.</p>
         </div>
         @endif
@@ -213,7 +241,7 @@
                 @endauth
             </div>
 
-            <!-- REPORT LISTING -->
+            
           <!-- REPORT LISTING -->
             @auth
                 <div style="margin-top:20px; background:#fff8f8; border:1px solid #fecaca; border-radius:10px; padding:16px;">
@@ -271,6 +299,166 @@
                 </div>
             @endauth
         </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div style="margin-top:40px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <div>
+                <h2 style="font-size:22px; font-weight:700;">
+                    ⭐ Reviews
+                    <span style="font-size:16px; font-weight:400; color:var(--gray);">({{ $property->reviewCount() }})</span>
+                </h2>
+                @if($property->reviewCount() > 0)
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                        @php $avg = round($property->averageRating(), 1); @endphp
+                        <div style="display:flex; gap:2px;">
+                            @for($i = 1; $i <= 5; $i++)
+                                <span style="font-size:20px; color:{{ $i <= round($avg) ? '#f59e0b' : '#d1d5db' }};">★</span>
+                            @endfor
+                        </div>
+                        <span style="font-size:18px; font-weight:700; color:#f59e0b;">{{ $avg }}</span>
+                        <span style="color:var(--gray); font-size:14px;">out of 5</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- WRITE A REVIEW --}}
+        @auth
+            @php
+                $hasBooked = \App\Models\Booking::where('user_id', Auth::id())
+                    ->where('property_id', $property->id)->exists();
+                $hasReviewed = \App\Models\Review::where('user_id', Auth::id())
+                    ->where('property_id', $property->id)->exists();
+            @endphp
+
+            @if($hasBooked && !$hasReviewed)
+                <div style="background:white; border-radius:12px; padding:28px; box-shadow:var(--shadow); margin-bottom:28px; border-left:4px solid var(--primary);">
+                    <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;">✍️ Write a Review</h3>
+                    <p style="font-size:13px; color:var(--gray); margin-bottom:20px;">Share your experience about this property.</p>
+
+                    @if(session('error'))
+                        <div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; font-size:13px; margin-bottom:16px;">{{ session('error') }}</div>
+                    @endif
+
+                    <form method="POST" action="{{ route('tenant.review.store', $property) }}">
+                        @csrf
+
+                        {{-- STAR RATING --}}
+                        <div style="margin-bottom:20px;">
+                            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:10px;">Your Rating *</label>
+                            <div class="star-rating" style="display:flex; gap:6px;">
+                                @for($i = 5; $i >= 1; $i--)
+                                    <input type="radio" name="rating" id="star{{ $i }}" value="{{ $i }}"
+                                        style="display:none;"
+                                        {{ old('rating') == $i ? 'checked' : '' }}>
+                                    <label for="star{{ $i }}"
+                                        style="font-size:36px; cursor:pointer; color:#d1d5db; transition:color 0.1s;"
+                                        onmouseover="highlightStars({{ $i }})"
+                                        onmouseout="resetStars()"
+                                        onclick="selectStar({{ $i }})">★</label>
+                                @endfor
+                            </div>
+                            <p style="font-size:12px; color:var(--gray); margin-top:6px;" id="ratingText">Click a star to rate</p>
+                        </div>
+
+                        {{-- COMMENT --}}
+                        <div style="margin-bottom:20px;">
+                            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Your Review <span style="font-weight:400; color:var(--gray);">(optional)</span></label>
+                            <textarea name="comment"
+                                placeholder="Describe your experience — location, condition, landlord responsiveness, value for money..."
+                                style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:14px; outline:none; resize:vertical; min-height:100px; font-family:inherit; transition:border-color 0.2s;"
+                                onfocus="this.style.borderColor='var(--primary)'"
+                                onblur="this.style.borderColor='var(--border)'">{{ old('comment') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="padding:12px 28px;">
+                            ⭐ Submit Review
+                        </button>
+                    </form>
+                </div>
+
+            @elseif($hasReviewed)
+                <div style="background:#f0faf5; border-radius:10px; padding:16px 20px; margin-bottom:28px; font-size:14px; color:var(--primary); border:1px solid #6ee7b7;">
+                    ✅ You have already reviewed this property.
+                </div>
+
+            @elseif(!$hasBooked)
+                <div style="background:#fef3c7; border-radius:10px; padding:16px 20px; margin-bottom:28px; font-size:14px; color:#92400e; border:1px solid #fcd34d;">
+                    📅 You need to <strong>book a viewing</strong> for this property before you can leave a review.
+                </div>
+            @endif
+        @else
+            <div style="background:var(--background); border-radius:10px; padding:16px 20px; margin-bottom:28px; font-size:14px; color:var(--gray); border:1px solid var(--border);">
+                <a href="/login" style="color:var(--primary); font-weight:600;">Login</a> to leave a review.
+            </div>
+        @endauth
+
+        {{-- DISPLAY REVIEWS --}}
+        @php $reviews = $property->reviews()->with('user')->latest()->get(); @endphp
+
+        @if($reviews->count() === 0)
+            <div style="text-align:center; padding:48px; background:white; border-radius:12px; box-shadow:var(--shadow);">
+                <div style="font-size:40px; margin-bottom:12px;">⭐</div>
+                <h3 style="font-size:17px; font-weight:600;">No reviews yet</h3>
+                <p style="color:var(--gray); font-size:14px; margin-top:6px;">Be the first to review this property.</p>
+            </div>
+        @else
+            <div style="display:flex; flex-direction:column; gap:16px;">
+                @foreach($reviews as $review)
+                <div style="background:white; border-radius:12px; padding:24px; box-shadow:var(--shadow);">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            {{-- AVATAR --}}
+                            <div style="width:44px; height:44px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:18px; flex-shrink:0;">
+                                {{ strtoupper(substr($review->user->name ?? 'U', 0, 1)) }}
+                            </div>
+                            <div>
+                                <div style="font-weight:600; font-size:15px;">{{ $review->user->name ?? 'Anonymous' }}</div>
+                                <div style="font-size:12px; color:var(--gray);">{{ $review->created_at->format('d M Y') }}</div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            {{-- STARS --}}
+                            <div style="display:flex; gap:2px;">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <span style="font-size:18px; color:{{ $i <= $review->rating ? '#f59e0b' : '#d1d5db' }};">★</span>
+                                @endfor
+                            </div>
+                            <span style="font-size:14px; font-weight:700; color:#f59e0b;">{{ $review->rating }}/5</span>
+
+                            {{-- DELETE OWN REVIEW --}}
+                            @auth
+                                @if(Auth::id() === $review->user_id)
+                                    <form method="POST" action="{{ route('tenant.review.destroy', $review) }}"
+                                        onsubmit="return confirm('Delete your review?')"
+                                        style="margin-left:8px;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            style="background:none; border:none; color:#9ca3af; cursor:pointer; font-size:13px; padding:2px 6px; border-radius:4px;"
+                                            onmouseover="this.style.color='#ef4444'"
+                                            onmouseout="this.style.color='#9ca3af'">
+                                            🗑 Delete
+                                        </button>
+                                    </form>
+                                @endif
+                            @endauth
+                        </div>
+                    </div>
+
+                    {{-- COMMENT --}}
+                    @if($review->comment)
+                        <p style="color:var(--text); font-size:14px; line-height:1.7; margin:0;">{{ $review->comment }}</p>
+                    @else
+                        <p style="color:var(--gray); font-size:13px; font-style:italic;">No written review.</p>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
     <!-- RELATED PROPERTIES -->
@@ -441,5 +629,36 @@ function toggleReport() {
     btn.textContent         = isHidden ? 'Cancel' : 'Report';
     btn.style.background    = isHidden ? '#6b7280' : '#ef4444';
 }
+
+// Star rating interaction
+let selectedRating = {{ old('rating', 0) }};
+
+function highlightStars(rating) {
+    const labels = document.querySelectorAll('.star-rating label');
+    labels.forEach((label, index) => {
+        const starValue = 5 - index;
+        label.style.color = starValue <= rating ? '#f59e0b' : '#d1d5db';
+    });
+    const texts = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    const ratingText = document.getElementById('ratingText');
+    if (ratingText) ratingText.textContent = texts[rating] + ' (' + rating + '/5)';
+}
+
+function resetStars() {
+    highlightStars(selectedRating);
+    const texts = ['Click a star to rate', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    const ratingText = document.getElementById('ratingText');
+    if (ratingText) ratingText.textContent = selectedRating ? texts[selectedRating] + ' (' + selectedRating + '/5)' : 'Click a star to rate';
+}
+
+function selectStar(rating) {
+    selectedRating = rating;
+    document.getElementById('star' + rating).checked = true;
+    highlightStars(rating);
+}
+
+// Initialize stars if old value exists
+if (selectedRating > 0) highlightStars(selectedRating);
+
 </script>
 @endsection

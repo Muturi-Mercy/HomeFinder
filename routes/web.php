@@ -9,6 +9,7 @@ use App\Http\Controllers\Landlord\LandlordController;
 use App\Http\Controllers\Tenant\PropertyController;
 use App\Http\Controllers\Tenant\MessageController;
 use App\Http\Controllers\Tenant\TenantController;
+use App\Http\Controllers\Tenant\ReviewController;
 
 // ─── HOME ───────────────────────────────────────────
 Route::get('/', function () {
@@ -36,6 +37,8 @@ Route::middleware(['isTenant'])->group(function () {
     Route::post('/bookings/{property}', [PropertyController::class, 'bookViewing'])->name('tenant.book');
     Route::post('/report/{property}', [PropertyController::class, 'report'])->name('tenant.report');
     Route::put('/profile', [TenantController::class, 'updateProfile'])->name('tenant.profile.update');
+    Route::post('/reviews/{property}', [ReviewController::class, 'store'])->name('tenant.review.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('tenant.review.destroy');
     Route::get('/profile', function () {
         return view('tenant.profile');
     })->name('tenant.profile');
@@ -94,4 +97,5 @@ Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('admin.analytics');
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/landlords/{landlord}/verify', [AdminController::class, 'verifyLandlord'])->name('admin.landlords.verify');
+    Route::delete('/reviews/{review}', [AdminController::class, 'deleteReview'])->name('admin.reviews.delete');
 });

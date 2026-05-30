@@ -13,11 +13,14 @@
         <!-- SMART SEARCH BAR -->
         <form action="/browse" method="GET" id="heroSearchForm">
             <div class="search-bar">
-                <input type="text"
-                    name="location"
-                    id="locationInput"
-                    placeholder="📍 Enter location (e.g., Rongai Town, Kiserian)"
-                    value="{{ request('location') }}">
+                <div class="location-wrapper">
+                    <i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i>
+                    <input type="text"
+                        name="location"
+                        id="locationInput"
+                        placeholder="Enter location (e.g., Rongai Town, Kiserian)"
+                        value="{{ request('location') }}">
+                </div>
                 <select name="max_price">
                     <option value="">Max Price</option>
                     <option value="5000">KSh 5,000</option>
@@ -59,7 +62,8 @@
                 style="background:white; border:2px solid var(--primary); color:var(--primary); padding:11px 22px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;"
                 onmouseover="this.style.background='var(--primary)'; this.style.color='white'"
                 onmouseout="this.style.background='white'; this.style.color='var(--primary)'">
-                🎯 Find Houses Near Me
+                  <i class="fa-solid fa-location-crosshairs" style="color: rgb(230, 57, 70);"></i>
+                Find Houses Near Me
             </button>
             <span style="font-size:13px; color:var(--gray);">Finds and sorts listings closest to you</span>
         </div>
@@ -67,21 +71,27 @@
         <!-- STATS -->
         <div class="hero-stats">
             <div class="stat">
-                <div class="stat-icon">🏠</div>
+                <div class="stat-icon">
+                   <i class="fa-solid fa-house"></i>
+                </div>
                 <div class="stat-text">
-                    <strong>500+</strong>
+                    <strong>100+</strong>
                     <span>Active Listings</span>
                 </div>
             </div>
             <div class="stat">
-                <div class="stat-icon">⭐</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1);"></i>
+                </div>
                 <div class="stat-text">
                     <strong>4.8/5</strong>
                     <span>Average Rating</span>
                 </div>
             </div>
             <div class="stat">
-                <div class="stat-icon">✅</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
                 <div class="stat-text">
                     <strong>100%</strong>
                     <span>Verified Landlords</span>
@@ -91,7 +101,7 @@
     </div>
 
     <div class="hero-image">
-        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80" alt="Modern House">
+        <img src="{{ asset('img/hero2image.jpg') }}" alt="Modern House">
     </div>
 </section>
 
@@ -101,19 +111,33 @@
     <p class="section-subtitle">Find your perfect home in 3 simple steps</p>
     <div class="steps">
         <div class="step">
-            <div class="step-icon">🔍</div>
+            <div class="step-icon">
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#1E7A5A;"></i>
+            </div>
             <h3>1. Search</h3>
             <p>Filter houses by location, price, and amenities to find what suits you.</p>
         </div>
-        <div class="step-arrow">→</div>
+
+        <div class="step-arrow">
+            <i class="fa-solid fa-chevron-right" style="color: rgba(148, 163, 184, 1);"></i>
+        </div>
+
         <div class="step">
-            <div class="step-icon">💬</div>
+            <div class="step-icon">
+                <i class="fa-solid fa-comments" style="color:#2563EB;"></i>
+            </div>
             <h3>2. Connect</h3>
             <p>Chat directly with landlords or schedule a viewing appointment.</p>
         </div>
-        <div class="step-arrow">→</div>
+
+        <div class="step-arrow">
+            <i class="fa-solid fa-chevron-right" style="color: rgba(148, 163, 184, 1);"></i>
+        </div>
+
         <div class="step">
-            <div class="step-icon">🔑</div>
+            <div class="step-icon">
+                <i class="fa-solid fa-key" style="color:#1E7A5A;"></i>
+            </div>
             <h3>3. Rent</h3>
             <p>Move into your new home easily after meeting the landlord.</p>
         </div>
@@ -129,48 +153,57 @@
 
     <div class="properties-grid">
         <div class="property-card">
-            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80" alt="Property">
+            <img src="{{ asset('img/LR1.jpg') }}" alt="PROPERTY">
             <div class="property-card-body">
                 <span class="property-badge">Featured</span>
                 <div class="property-title">Modern 2BR Apartment</div>
-                <div class="property-location">📍 Rongai Town, Nairobi</div>
+                <div class="property-location">
+                    <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i>
+                    Rongai Town, Nairobi
+                </div>
                 <div class="property-price">KSh 35,000 <span>/ month</span></div>
                 <div class="property-features">
-                    <span>🛏 2 Beds</span>
-                    <span>🚿 2 Baths</span>
-                    <span>🚗 Parking</span>
-                    <span>📶 Wi-Fi</span>
+                    <span><i class="fa-solid fa-bed" style="color: rgba(37, 99, 235, 1);"></i> 2 Beds</span>
+                    <span><i class="fa-solid fa-bath" style="color: rgba(14, 165, 233, 1);"></i> 2 Baths</span>
+                    <span><i class="fa-solid fa-car" style="color: rgba(34, 197, 94, 1);"></i> Parking</span>
+                    <span><i class="fa-solid fa-wifi" style="color: rgba(168, 85, 247, 1);"></i> Wi-Fi</span>
                 </div>
             </div>
         </div>
 
         <div class="property-card">
-            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&q=80" alt="Property">
+            <img src="{{ asset('img/LR2.jpg') }}" alt="PROPERTY">
             <div class="property-card-body">
                 <span class="property-badge">Available</span>
                 <div class="property-title">Spacious Bedsitter</div>
-                <div class="property-location">📍 Kiserian, Kajiado</div>
+               <div class="property-location">
+                    <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i>
+                    Kiserian, Kajiado
+                </div>
                 <div class="property-price">KSh 8,000 <span>/ month</span></div>
                 <div class="property-features">
-                    <span>🛏 1 Bed</span>
-                    <span>🚿 1 Bath</span>
-                    <span>💧 Water</span>
+                    <span><i class="fa-solid fa-bed" style="color: rgba(37, 99, 235, 1);"></i> 1 Bed</span>
+                    <span><i class="fa-solid fa-bath" style="color: rgba(14, 165, 233, 1);"></i> 1 Bath</span>
+                    <span><i class="fa-solid fa-droplet" style="color: rgba(59, 130, 246, 1);"></i> Water</span>
                 </div>
             </div>
         </div>
 
         <div class="property-card">
-            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80" alt="Property">
+            <img src="{{ asset('img/LR3.jpg') }}" alt="PROPERTY">
             <div class="property-card-body">
                 <span class="property-badge">Featured</span>
                 <div class="property-title">3BR House with Garden</div>
-                <div class="property-location">📍 Olkeri, Kajiado</div>
+               <div class="property-location">
+                    <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i>
+                    Olkeri, Kajiado
+                </div>
                 <div class="property-price">KSh 45,000 <span>/ month</span></div>
                 <div class="property-features">
-                    <span>🛏 3 Beds</span>
-                    <span>🚿 2 Baths</span>
-                    <span>🚗 Parking</span>
-                    <span>🔒 Security</span>
+                    <span><i class="fa-solid fa-bed" style="color: rgba(37, 99, 235, 1);"></i> 3 Beds</span>
+                    <span><i class="fa-solid fa-bath" style="color: rgba(14, 165, 233, 1);"></i> 2 Baths</span>
+                    <span><i class="fa-solid fa-car" style="color: rgba(34, 197, 94, 1);"></i> Parking</span>
+                    <span><i class="fa-solid fa-shield-halved" style="color: rgba(245, 158, 11, 1);"></i> Security</span>
                 </div>
             </div>
         </div>
@@ -191,12 +224,12 @@
 // OPTION 2 — GPS Near Me
 function searchNearMe() {
     const btn = document.getElementById('nearMeBtn');
-    btn.innerHTML = '⏳ Getting your location...';
+    btn.innerHTML = 'Getting your location...';
     btn.disabled  = true;
 
     if (!navigator.geolocation) {
         alert('Geolocation is not supported by your browser.');
-        btn.innerHTML = '🎯 Find Houses Near Me';
+        btn.innerHTML = 'Find Houses Near Me';
         btn.disabled  = false;
         return;
     }
@@ -211,12 +244,12 @@ function searchNearMe() {
             document.getElementById('heroSort').value     = 'nearest';
             document.getElementById('locationInput').value = '';
 
-            btn.innerHTML = '✅ Location found! Searching...';
+            btn.innerHTML = 'Location found! Searching...';
             document.getElementById('heroSearchForm').submit();
         },
         function(error) {
             alert('Could not get your location. Please allow location access or type a location manually.');
-            btn.innerHTML = '🎯 Find Houses Near Me';
+            btn.innerHTML = 'Find Houses Near Me';
             btn.disabled  = false;
         }
     );

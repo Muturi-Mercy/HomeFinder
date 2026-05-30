@@ -148,19 +148,23 @@
                 </div>
             </div>
 
+        
             {{-- AMENITIES --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div class="section-title">✅ Amenities</div>
                 <div class="amenity-grid">
                     @foreach($amenities as $amenity)
-                    <label class="amenity-item">
+                    <label class="amenity-item" style="transition:all 0.2s;">
                         <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}"
-                            {{ in_array($amenity->id, old('amenities', [])) ? 'checked' : '' }}>
-                        {{ $amenity->icon }} {{ $amenity->name }}
+                            {{ in_array($amenity->id, old('amenities', [])) ? 'checked' : '' }}
+                            style="accent-color:{{ $amenity->color }};">
+                        <i class="{{ $amenity->icon }}" style="color:{{ $amenity->color }}; font-size:15px;"></i>
+                        {{ $amenity->name }}
                     </label>
                     @endforeach
                 </div>
             </div>
+
 
             {{-- IMAGES --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">

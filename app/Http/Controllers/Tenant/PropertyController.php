@@ -9,15 +9,17 @@ use App\Models\Booking;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PropertyController extends Controller
 {
+    // Browse Houses
     public function browse(Request $request)
     {
         $query = Property::with(['landlord', 'amenities'])
                     ->where('status', 'approved');
 
-        // Search by location
+        // Search by location text
         if ($request->filled('location')) {
             $query->where('location', 'like', '%'.$request->location.'%');
         }
@@ -51,19 +53,60 @@ class PropertyController extends Controller
             }
         }
 
-        // Sort
-        $sort = $request->sort ?? 'newest';
-        match($sort) {
-            'price_low'  => $query->orderBy('price', 'asc'),
-            'price_high' => $query->orderBy('price', 'desc'),
-            default      => $query->latest(),
-        };
+        $userLat = $request->user_lat;
+        $userLng = $request->user_lng;
+        $sort    = $request->sort ?? 'newest';
 
-        $properties  = $query->paginate(9)->withQueryString();
-        $amenities   = \App\Models\Amenity::all();
-        $totalCount  = $query->toBase()->getCountForPagination();
+        // Distance sorting — nearest to furthest
+        if ($userLat && $userLng && $sort === 'nearest') {
+            $allProps = $query->whereNotNull('latitude')
+                            ->whereNotNull('longitude')
+                            ->get();
 
-        return view('tenant.browse', compact('properties', 'amenities'));
+            $sorted = $allProps->map(function($property) use ($userLat, $userLng) {
+                $property->distance = $this->calculateDistance(
+                    $userLat, $userLng,
+                    $property->latitude, $property->longitude
+                );
+                return $property;
+            })->sortBy('distance');
+
+            // Manual pagination
+            $page       = $request->get('page', 1);
+            $perPage    = 9;
+            $items      = $sorted->slice(($page - 1) * $perPage, $perPage)->values();
+            $properties = new LengthAwarePaginator(
+                $items,
+                $sorted->count(),
+                $perPage,
+                $page,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
+
+        } else {
+            // Normal sorting
+            match($sort) {
+                'price_low'  => $query->orderBy('price', 'asc'),
+                'price_high' => $query->orderBy('price', 'desc'),
+                default      => $query->latest(),
+            };
+            $properties = $query->paginate(9)->withQueryString();
+        }
+
+        $amenities = \App\Models\Amenity::all();
+        return view('tenant.browse', compact('properties', 'amenities', 'userLat', 'userLng'));
+    }
+
+    // Calculate distance between two coordinates (Haversine formula)
+    private function calculateDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $R    = 6371;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLng = deg2rad($lng2 - $lng1);
+        $a    = sin($dLat/2) * sin($dLat/2) +
+                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+                sin($dLng/2) * sin($dLng/2);
+        return $R * 2 * atan2(sqrt($a), sqrt(1-$a));
     }
 
     // Property Details
