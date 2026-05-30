@@ -29,6 +29,7 @@
             <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
             <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
             <li><a href="{{ route('landlord.messages') }}"><span class="icon">💬</span> Messages</a></li>
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
         </ul>
         <div style="padding:24px;">
             <form method="POST" action="{{ route('landlord.logout') }}">
@@ -111,7 +112,7 @@
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
                 <div class="section-title">📍 Property Location on Map</div>
                 <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
-                    Click anywhere on the map to pin your property location. Coordinates will fill automatically.
+                    Pin your property location using the map. You can click manually or use your current location if you are on site.
                 </p>
 
                 <div id="pinMap" style="height:300px; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:16px; cursor:crosshair;"></div>
@@ -120,18 +121,27 @@
                     📍 Click on the map above to update the property location
                 </div>
 
+                <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+                    <button type="button" onclick="useMyLocation()"
+                        id="useLocationBtn"
+                        style="background:var(--accent); color:white; border:none; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        📍 Use My Current Location
+                    </button>
+                    
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Latitude (auto-filled)</label>
                         <input type="text" name="latitude" id="latInput" class="form-control"
-                            placeholder="Click map to set"
+                            placeholder="Click map or use location button"
                             value="{{ old('latitude', $property->latitude) }}"
                             readonly style="background:#f8f9fa;">
                     </div>
                     <div class="form-group">
                         <label>Longitude (auto-filled)</label>
                         <input type="text" name="longitude" id="lngInput" class="form-control"
-                            placeholder="Click map to set"
+                            placeholder="Click map or use location button"
                             value="{{ old('longitude', $property->longitude) }}"
                             readonly style="background:#f8f9fa;">
                     </div>
@@ -185,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let marker = null;
 
-    // If property already has coordinates show existing marker
+    // Show existing coordinates marker
     if (hasCoords) {
         const icon = L.divIcon({
             html: '<div style="background:#1E7A5A; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Current Location</div>',
@@ -197,9 +207,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const status = document.getElementById('pinStatus');
         status.innerHTML = `✅ Current location: <strong>${existingLat}, ${existingLng}</strong>. Click map to change.`;
         status.style.background = '#d1fae5';
-        status.style.color = '#065f46';
+        status.style.color      = '#065f46';
     }
 
+    // Click to pin
     pinMap.on('click', function(e) {
         const lat = e.latlng.lat.toFixed(7);
         const lng = e.latlng.lng.toFixed(7);
@@ -213,15 +224,62 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         marker = L.marker([lat, lng], {icon}).addTo(pinMap);
-
         document.getElementById('latInput').value = lat;
         document.getElementById('lngInput').value = lng;
 
         const status = document.getElementById('pinStatus');
         status.innerHTML = `✅ Location updated to <strong>${lat}, ${lng}</strong>. Click again to change.`;
         status.style.background = '#d1fae5';
-        status.style.color = '#065f46';
+        status.style.color      = '#065f46';
     });
+
+    // Use current location
+    window.useMyLocation = function() {
+        const btn = document.getElementById('useLocationBtn');
+        btn.textContent = '⏳ Getting location...';
+        btn.disabled    = true;
+
+        if (!navigator.geolocation) {
+            alert('Geolocation is not supported by your browser.');
+            btn.textContent = '📍 Use My Current Location';
+            btn.disabled    = false;
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude.toFixed(7);
+                const lng = position.coords.longitude.toFixed(7);
+
+                if (marker) pinMap.removeLayer(marker);
+
+                const icon = L.divIcon({
+                    html: '<div style="background:#2563EB; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Your Location</div>',
+                    className: '',
+                    iconAnchor: [0, 0]
+                });
+
+                marker = L.marker([lat, lng], {icon}).addTo(pinMap);
+                pinMap.setView([lat, lng], 17);
+
+                document.getElementById('latInput').value = lat;
+                document.getElementById('lngInput').value = lng;
+
+                const status = document.getElementById('pinStatus');
+                status.innerHTML = `✅ Set to your current location: <strong>${lat}, ${lng}</strong>. Click map to adjust.`;
+                status.style.background = '#dbeafe';
+                status.style.color      = '#1e40af';
+
+                btn.textContent = '📍 Use My Current Location';
+                btn.disabled    = false;
+            },
+            function(error) {
+                alert('Could not get your location. Please allow location access or pin manually.');
+                btn.textContent = '📍 Use My Current Location';
+                btn.disabled    = false;
+            }
+        );
+    };
 });
 </script>
 </body>
