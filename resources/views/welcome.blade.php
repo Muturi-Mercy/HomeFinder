@@ -10,11 +10,12 @@
         <h1>Find Your <span>Perfect</span> Rental Home</h1>
         <p>Connect with verified landlords and find houses that match your needs and budget in Ongata Rongai.</p>
 
-        <!-- SEARCH BAR -->
-        <form action="/browse" method="GET">
+        <!-- SMART SEARCH BAR -->
+        <form action="/browse" method="GET" id="heroSearchForm">
             <div class="search-bar">
                 <input type="text"
                     name="location"
+                    id="locationInput"
                     placeholder="📍 Enter location (e.g., Rongai Town, Kiserian)"
                     value="{{ request('location') }}">
                 <select name="max_price">
@@ -35,9 +36,33 @@
                     <option value="2_bedroom">2 Bedrooms</option>
                     <option value="3_bedroom">3 Bedrooms</option>
                 </select>
+                <!-- Hidden fields for location-based sorting -->
+                <input type="hidden" name="user_lat" id="heroUserLat">
+                <input type="hidden" name="user_lng" id="heroUserLng">
+                <input type="hidden" name="sort" id="heroSort" value="newest">
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </form>
+
+        <!-- DIVIDER -->
+        <div style="display:flex; align-items:center; gap:12px; margin:14px 0 10px;">
+            <div style="flex:1; height:1px; background:rgba(0,0,0,0.1);"></div>
+            <span style="font-size:13px; color:var(--gray);">or</span>
+            <div style="flex:1; height:1px; background:rgba(0,0,0,0.1);"></div>
+        </div>
+
+        <!-- USE MY LOCATION BUTTON -->
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:20px;">
+            <button type="button"
+                onclick="searchNearMe()"
+                id="nearMeBtn"
+                style="background:white; border:2px solid var(--primary); color:var(--primary); padding:11px 22px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;"
+                onmouseover="this.style.background='var(--primary)'; this.style.color='white'"
+                onmouseout="this.style.background='white'; this.style.color='var(--primary)'">
+                🎯 Find Houses Near Me
+            </button>
+            <span style="font-size:13px; color:var(--gray);">Finds and sorts listings closest to you</span>
+        </div>
 
         <!-- STATS -->
         <div class="hero-stats">
@@ -103,7 +128,6 @@
     </div>
 
     <div class="properties-grid">
-        <!-- Placeholder cards — we'll replace with real DB data in Phase 7 -->
         <div class="property-card">
             <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80" alt="Property">
             <div class="property-card-body">
@@ -160,4 +184,72 @@
     <a href="/landlord/register" class="btn" style="background:white; color: var(--primary); font-size:16px; padding: 14px 36px;">List Your Property</a>
 </section>
 
+@endsection
+
+@section('scripts')
+<script>
+// OPTION 2 — GPS Near Me
+function searchNearMe() {
+    const btn = document.getElementById('nearMeBtn');
+    btn.innerHTML = '⏳ Getting your location...';
+    btn.disabled  = true;
+
+    if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        btn.innerHTML = '🎯 Find Houses Near Me';
+        btn.disabled  = false;
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            document.getElementById('heroUserLat').value  = lat;
+            document.getElementById('heroUserLng').value  = lng;
+            document.getElementById('heroSort').value     = 'nearest';
+            document.getElementById('locationInput').value = '';
+
+            btn.innerHTML = '✅ Location found! Searching...';
+            document.getElementById('heroSearchForm').submit();
+        },
+        function(error) {
+            alert('Could not get your location. Please allow location access or type a location manually.');
+            btn.innerHTML = '🎯 Find Houses Near Me';
+            btn.disabled  = false;
+        }
+    );
+}
+
+// OPTION 1 — Geocode typed location then sort by nearest
+document.getElementById('heroSearchForm').addEventListener('submit', function(e) {
+    const locationInput = document.getElementById('locationInput').value.trim();
+    const userLat       = document.getElementById('heroUserLat').value;
+
+    // If GPS coords already set (from nearMe button) just submit
+    if (userLat) return;
+
+    // If user typed a location geocode it
+    if (locationInput) {
+        e.preventDefault();
+
+        const query = encodeURIComponent(locationInput + ', Rongai, Kenya');
+        fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    document.getElementById('heroUserLat').value = data[0].lat;
+                    document.getElementById('heroUserLng').value = data[0].lon;
+                    document.getElementById('heroSort').value    = 'nearest';
+                }
+                document.getElementById('heroSearchForm').submit();
+            })
+            .catch(() => {
+                // Geocoding failed — just do normal text search
+                document.getElementById('heroSearchForm').submit();
+            });
+    }
+});
+</script>
 @endsection

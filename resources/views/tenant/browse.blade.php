@@ -14,6 +14,10 @@
 
             <form method="GET" action="/browse" id="filterForm">
 
+                <!-- Preserve user location through filters -->
+                <input type="hidden" name="user_lat" value="{{ request('user_lat') }}">
+                <input type="hidden" name="user_lng" value="{{ request('user_lng') }}">
+
                 <!-- LOCATION -->
                 <div class="filter-group">
                     <label>📍 Location</label>
@@ -104,7 +108,7 @@
 
         <!-- SEARCH BAR -->
         <div style="background:white; border-radius:10px; padding:16px 20px; box-shadow:var(--shadow); margin-bottom:20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-            <form method="GET" action="/browse" style="display:flex; gap:10px; flex:1; flex-wrap:wrap;">
+            <form method="GET" action="/browse" style="display:flex; gap:10px; flex:1; flex-wrap:wrap;" id="browseSearchForm">
                 @foreach(request()->except(['location','sort']) as $key => $value)
                     @if(is_array($value))
                         @foreach($value as $v)
@@ -114,14 +118,30 @@
                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                     @endif
                 @endforeach
+                <input type="hidden" name="user_lat" id="browseUserLat" value="{{ request('user_lat') }}">
+                <input type="hidden" name="user_lng" id="browseUserLng" value="{{ request('user_lng') }}">
+                <input type="hidden" name="sort" id="browseSort" value="{{ request('sort', 'newest') }}">
                 <input type="text"
                     name="location"
+                    id="browseLocationInput"
                     placeholder="🔍 Search by location..."
                     value="{{ request('location') }}"
                     style="flex:1; min-width:200px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none;">
                 <button type="submit" class="btn btn-primary">Search</button>
+                <button type="button" onclick="browseNearMe()" id="browseNearMeBtn"
+                    style="background:var(--accent); color:white; border:none; padding:10px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;">
+                    🎯 Near Me
+                </button>
             </form>
         </div>
+
+        <!-- NEAR ME BANNER -->
+        @if(request('user_lat') && request('user_lng') && request('sort') === 'nearest')
+        <div style="background:#dbeafe; color:#1e40af; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+            🎯 Showing listings sorted by distance from your location.
+            <a href="/browse" style="margin-left:auto; color:#1e40af; font-size:12px; text-decoration:underline; white-space:nowrap;">Clear</a>
+        </div>
+        @endif
 
         <!-- RESULTS HEADER -->
         <div class="browse-header">
@@ -133,8 +153,14 @@
                     <p style="font-size:13px; color:var(--gray); margin-top:2px;">
                         Showing results for "<strong>{{ request('location') }}</strong>"
                     </p>
+                @elseif(request('user_lat') && request('sort') === 'nearest')
+                    <p style="font-size:13px; color:var(--gray); margin-top:2px;">
+                        📍 Sorted by distance from your location
+                    </p>
                 @endif
             </div>
+
+            <!-- SORT -->
             <form method="GET" action="/browse">
                 @foreach(request()->except('sort') as $key => $value)
                     @if(is_array($value))
@@ -150,6 +176,9 @@
                     <option value="newest" {{ request('sort', 'newest') === 'newest' ? 'selected' : '' }}>Newest First</option>
                     <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                     <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
+                    @if(request('user_lat') && request('user_lng'))
+                    <option value="nearest" {{ request('sort') === 'nearest' ? 'selected' : '' }}>📍 Nearest to Me</option>
+                    @endif
                 </select>
             </form>
 
@@ -161,12 +190,12 @@
             </button>
         </div>
 
-        <!-- MAP VIEW (hidden by default) -->
+        <!-- MAP VIEW -->
         <div id="browseMapContainer" style="display:none; margin-bottom:24px;">
             <div id="browseMap" style="height:450px; border-radius:10px; overflow:hidden; border:1px solid var(--border);"></div>
         </div>
 
-        <!-- ACTIVE FILTERS DISPLAY -->
+        <!-- ACTIVE FILTERS -->
         @if(request('location') || request('type') || request('max_price') || request('furnished') || request('amenities'))
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
             @if(request('location'))
@@ -215,6 +244,21 @@
                         <div style="width:100%; height:200px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:48px;">🏠</div>
                     @endif
                     <div class="property-card-body">
+
+                        {{-- Distance badge --}}
+                        @if(isset($userLat) && $userLat && $property->latitude && $property->longitude)
+                            @php
+                                $R    = 6371;
+                                $dLat = deg2rad($property->latitude - $userLat);
+                                $dLng = deg2rad($property->longitude - $userLng);
+                                $a    = sin($dLat/2)*sin($dLat/2) + cos(deg2rad($userLat))*cos(deg2rad($property->latitude))*sin($dLng/2)*sin($dLng/2);
+                                $dist = round($R * 2 * atan2(sqrt($a), sqrt(1-$a)), 1);
+                            @endphp
+                            <span style="background:#dbeafe; color:#1e40af; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:6px;">
+                                📍 {{ $dist }} km away
+                            </span>
+                        @endif
+
                         @if($property->is_featured)
                             <span class="property-badge">⭐ Featured</span>
                         @endif
@@ -251,103 +295,143 @@
 
 @section('scripts')
 <script>
-    // Sync price range slider with hidden input
-    const slider = document.querySelector('input[name="max_price"]');
-    if (slider) {
-        slider.addEventListener('change', function() {
-            document.getElementById('priceDisplay').textContent =
-                'KSh ' + Number(this.value).toLocaleString();
-        });
+// Price slider sync
+const slider = document.querySelector('input[name="max_price"]');
+if (slider) {
+    slider.addEventListener('change', function() {
+        document.getElementById('priceDisplay').textContent =
+            'KSh ' + Number(this.value).toLocaleString();
+    });
+}
+
+// Near Me button on browse page
+function browseNearMe() {
+    const btn = document.getElementById('browseNearMeBtn');
+    btn.textContent = '⏳ Getting location...';
+    btn.disabled    = true;
+
+    if (!navigator.geolocation) {
+        alert('Geolocation not supported by your browser.');
+        btn.textContent = '🎯 Near Me';
+        btn.disabled    = false;
+        return;
     }
-</script>
 
-<script>
-    let browseMap     = null;
-    let mapVisible    = false;
-    let markersAdded  = false;
-
-    // Properties data from PHP
-    const properties = [
-        @foreach($properties as $property)
-        @if($property->latitude && $property->longitude)
-        {
-            id:       {{ $property->id }},
-            title:    "{{ addslashes($property->title) }}",
-            location: "{{ addslashes($property->location) }}",
-            price:    "{{ number_format($property->price) }}",
-            lat:      {{ $property->latitude }},
-            lng:      {{ $property->longitude }},
-            type:     "{{ str_replace('_',' ', ucfirst($property->property_type)) }}",
-            beds:     {{ $property->bedrooms }},
-            url:      "/properties/{{ $property->id }}"
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            document.getElementById('browseUserLat').value    = position.coords.latitude;
+            document.getElementById('browseUserLng').value    = position.coords.longitude;
+            document.getElementById('browseSort').value       = 'nearest';
+            document.getElementById('browseLocationInput').value = '';
+            document.getElementById('browseSearchForm').submit();
         },
-        @endif
-        @endforeach
-    ];
-
-    function toggleMapView() {
-        const container = document.getElementById('browseMapContainer');
-        const btn       = document.getElementById('mapToggleBtn');
-        mapVisible      = !mapVisible;
-
-        if (mapVisible) {
-            container.style.display = 'block';
-            btn.textContent         = '📋 List View';
-            btn.style.background    = 'var(--primary)';
-            btn.style.color         = 'white';
-
-            // Initialize map only once
-            if (!browseMap) {
-                // Center on Rongai
-                browseMap = L.map('browseMap').setView([-1.3978, 36.7565], 13);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                }).addTo(browseMap);
-            }
-
-            // Add markers if not added yet
-            if (!markersAdded && properties.length > 0) {
-                const bounds = [];
-
-                properties.forEach(prop => {
-                    const icon = L.divIcon({
-                        html: `<div style="background:#1E7A5A; color:white; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;">🏠 KSh ${prop.price}</div>`,
-                        className: '',
-                        iconAnchor: [0, 0]
-                    });
-
-                    const marker = L.marker([prop.lat, prop.lng], {icon})
-                        .addTo(browseMap)
-                        .bindPopup(`
-                            <div style="min-width:200px;">
-                                <strong style="font-size:14px;">${prop.title}</strong><br>
-                                <span style="color:#6c757d; font-size:13px;">📍 ${prop.location}</span><br>
-                                <span style="color:#1E7A5A; font-weight:700; font-size:15px;">KSh ${prop.price}/mo</span><br>
-                                <span style="font-size:12px;">🛏 ${prop.beds} bed • ${prop.type}</span><br>
-                                <a href="${prop.url}" style="display:inline-block; margin-top:8px; background:#1E7A5A; color:white; padding:6px 14px; border-radius:6px; font-size:12px; text-decoration:none;">View Details →</a>
-                            </div>
-                        `);
-
-                    bounds.push([prop.lat, prop.lng]);
-                });
-
-                if (bounds.length > 0) {
-                    browseMap.fitBounds(bounds, {padding: [40, 40]});
-                }
-
-                markersAdded = true;
-            }
-
-            // Fix map size issue when container was hidden
-            setTimeout(() => browseMap.invalidateSize(), 100);
-
-        } else {
-            container.style.display = 'none';
-            btn.textContent         = '🗺️ Map View';
-            btn.style.background    = 'transparent';
-            btn.style.color         = 'var(--primary)';
+        function(error) {
+            alert('Could not get your location. Please allow location access.');
+            btn.textContent = '🎯 Near Me';
+            btn.disabled    = false;
         }
+    );
+}
+
+// Geocode typed location on browse search bar
+document.getElementById('browseSearchForm').addEventListener('submit', function(e) {
+    const locationInput = document.getElementById('browseLocationInput').value.trim();
+    const userLat       = document.getElementById('browseUserLat').value;
+
+    // If GPS already set just submit
+    if (userLat) return;
+
+    if (locationInput) {
+        e.preventDefault();
+        const query = encodeURIComponent(locationInput + ', Rongai, Kenya');
+        fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`)
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    document.getElementById('browseUserLat').value = data[0].lat;
+                    document.getElementById('browseUserLng').value = data[0].lon;
+                    document.getElementById('browseSort').value    = 'nearest';
+                }
+                document.getElementById('browseSearchForm').submit();
+            })
+            .catch(() => document.getElementById('browseSearchForm').submit());
     }
+});
+
+// Map view toggle
+let browseMap    = null;
+let mapVisible   = false;
+let markersAdded = false;
+
+const properties = [
+    @foreach($properties as $property)
+    @if($property->latitude && $property->longitude)
+    {
+        id:       {{ $property->id }},
+        title:    "{{ addslashes($property->title) }}",
+        location: "{{ addslashes($property->location) }}",
+        price:    "{{ number_format($property->price) }}",
+        lat:      {{ $property->latitude }},
+        lng:      {{ $property->longitude }},
+        type:     "{{ str_replace('_',' ', ucfirst($property->property_type)) }}",
+        beds:     {{ $property->bedrooms }},
+        url:      "/properties/{{ $property->id }}"
+    },
+    @endif
+    @endforeach
+];
+
+function toggleMapView() {
+    const container = document.getElementById('browseMapContainer');
+    const btn       = document.getElementById('mapToggleBtn');
+    mapVisible      = !mapVisible;
+
+    if (mapVisible) {
+        container.style.display = 'block';
+        btn.textContent         = '📋 List View';
+        btn.style.background    = 'var(--primary)';
+        btn.style.color         = 'white';
+
+        if (!browseMap) {
+            browseMap = L.map('browseMap').setView([-1.3978, 36.7565], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(browseMap);
+        }
+
+        if (!markersAdded && properties.length > 0) {
+            const bounds = [];
+            properties.forEach(prop => {
+                const icon = L.divIcon({
+                    html: `<div style="background:#1E7A5A; color:white; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;">🏠 KSh ${prop.price}</div>`,
+                    className: '',
+                    iconAnchor: [0, 0]
+                });
+                L.marker([prop.lat, prop.lng], {icon})
+                    .addTo(browseMap)
+                    .bindPopup(`
+                        <div style="min-width:200px;">
+                            <strong style="font-size:14px;">${prop.title}</strong><br>
+                            <span style="color:#6c757d; font-size:13px;">📍 ${prop.location}</span><br>
+                            <span style="color:#1E7A5A; font-weight:700; font-size:15px;">KSh ${prop.price}/mo</span><br>
+                            <span style="font-size:12px;">🛏 ${prop.beds} bed • ${prop.type}</span><br>
+                            <a href="${prop.url}" style="display:inline-block; margin-top:8px; background:#1E7A5A; color:white; padding:6px 14px; border-radius:6px; font-size:12px; text-decoration:none;">View Details →</a>
+                        </div>
+                    `);
+                bounds.push([prop.lat, prop.lng]);
+            });
+            if (bounds.length > 0) browseMap.fitBounds(bounds, {padding: [40, 40]});
+            markersAdded = true;
+        }
+
+        setTimeout(() => browseMap.invalidateSize(), 100);
+
+    } else {
+        container.style.display = 'none';
+        btn.textContent         = '🗺️ Map View';
+        btn.style.background    = 'transparent';
+        btn.style.color         = 'var(--primary)';
+    }
+}
 </script>
 @endsection
