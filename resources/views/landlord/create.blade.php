@@ -6,6 +6,14 @@
     <title>Add New Property - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="shortcut icon" href="{{ asset('img/logohf.png') }}">
     <style>
         .form-group{margin-bottom:20px;}
         .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text);}
@@ -28,24 +36,24 @@
     <aside class="sidebar">
         <div class="sidebar-brand">Home<span>Finder</span></div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon">📊</span> Dashboard</a></li>
-            <li><a href="{{ route('landlord.properties') }}"><span class="icon">🏠</span> My Listings</a></li>
-            <li><a href="{{ route('landlord.properties.create') }}" class="active"><span class="icon">➕</span> Add Property</a></li>
-            <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
-            <li><a href="{{ route('landlord.messages') }}"><span class="icon">💬</span> Messages</a></li>
-            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
+            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon"><i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i></span> Dashboard</a></li>
+            <li><a href="{{ route('landlord.properties') }}"><span class="icon"><i class="fa-solid fa-building-user" style="color: #1E7A5A; margin-right:6px;"></i></span> My Listings</a></li>
+            <li><a href="{{ route('landlord.properties.create') }}"class="active"><span class="icon"><i class="fa-solid fa-circle-plus"style="color: #1E7A5A; margin-right:6px;"></i></span> Add Property</a></li>
+            <li><a href="{{ route('landlord.bookings') }}"><span class="icon"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a; margin-right:6px;"></i> </span> Bookings</a></li>
+            <li><a href="{{ route('landlord.messages') }}" ><span class="icon"><i class="fa-solid fa-comments" style="color:#1e7a5a; margin-right:6px;"></i></span> Messages
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon"><i class="fa-solid fa-user" style="color:#1e7a5a"></i></span> Profile</a></li>
         </ul>
         <div style="padding:24px;">
             <form method="POST" action="{{ route('landlord.logout') }}">
                 @csrf
-                <button type="submit" class="btn btn-outline" style="width:100%">🚪 Logout</button>
+                <button type="submit" class="btn btn-outline" style="width:100%"><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px;"></i>  Logout</button>
             </form>
         </div>
     </aside>
 
     <main class="dashboard-content">
         <div style="margin-bottom:24px;">
-            <h1 style="font-size:24px; font-weight:700;">➕ Add New Property</h1>
+            <h1 style="font-size:24px; font-weight:700;"><i class="fa-solid fa-circle-plus"style="color: #1E7A5A; margin-right:6px;"></i> Add New Property</h1>
             <p style="color:var(--gray); font-size:14px;">Fill in the details below. Your listing will be reviewed by admin before going live.</p>
         </div>
 
@@ -60,7 +68,7 @@
 
             {{-- BASIC INFO --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">📋 Basic Information</div>
+                <div class="section-title"><i class="fa-solid fa-clipboard-list"></i> Basic Information</div>
                 <div class="form-group">
                     <label>Property Title *</label>
                     <input type="text" name="title" class="form-control" placeholder="e.g. Modern 2BR Apartment in Rongai Town" value="{{ old('title') }}" required>
@@ -110,7 +118,7 @@
 
             {{-- MAP PIN --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">📍 Property Location on Map</div>
+                <div class="section-title"><i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i> Property Location on Map</div>
                 <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
                     Pin your property location using the map. You can click on the map manually or use your current location if you are on site.
                 </p>
@@ -118,14 +126,14 @@
                 <div id="pinMap" style="height:300px; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:16px; cursor:crosshair;"></div>
 
                 <div style="background:#f0faf5; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:var(--primary);" id="pinStatus">
-                    📍 Click on the map above to pin your property location
+                    <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Click on the map above to pin your property location
                 </div>
 
                 <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
                     <button type="button" onclick="useMyLocation()"
                         id="useLocationBtn"
                         style="background:var(--accent); color:white; border:none; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;">
-                        📍 Use My Current Location
+                        <i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i> Use My Current Location
                     </button>
                     
                 </div>
@@ -151,7 +159,7 @@
         
             {{-- AMENITIES --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">✅ Amenities</div>
+                <div class="section-title"> <i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1); margin-right:6px;"></i>Amenities</div>
                 <div class="amenity-grid">
                     @foreach($amenities as $amenity)
                     <label class="amenity-item" style="transition:all 0.2s;">
@@ -168,7 +176,7 @@
 
             {{-- IMAGES --}}
             <div style="background:white; border-radius:10px; padding:28px; box-shadow:var(--shadow); margin-bottom:24px;">
-                <div class="section-title">📸 Property Images</div>
+                <div class="section-title"><i class="fa-solid fa-camera"></i> Property Images</div>
                 <div class="form-group">
                     <label>Cover Image (Main Photo)</label>
                     <input type="file" name="cover_image" class="form-control" accept="image/*">
@@ -180,7 +188,7 @@
             </div>
 
             <div style="display:flex; gap:16px;">
-                <button type="submit" class="btn btn-primary" style="padding:14px 36px; font-size:15px;">🚀 Submit Listing</button>
+                <button type="submit" class="btn btn-primary" style="padding:14px 36px; font-size:15px;"><i class="fa-solid fa-upload" style="color: rgba(245, 158, 11, 1);"></i> Submit Listing</button>
                 <a href="{{ route('landlord.properties') }}" class="btn btn-outline" style="padding:14px 36px;">Cancel</a>
             </div>
         </form>
@@ -204,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (oldLat && oldLng) {
         marker = L.marker([parseFloat(oldLat), parseFloat(oldLng)]).addTo(pinMap);
         pinMap.setView([parseFloat(oldLat), parseFloat(oldLng)], 16);
-        document.getElementById('pinStatus').textContent = '✅ Location pinned! Click again to change it.';
+        document.getElementById('pinStatus').textContent = ' Location pinned! Click again to change it.';
     }
 
     // Click to pin
@@ -215,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (marker) pinMap.removeLayer(marker);
 
         const icon = L.divIcon({
-            html: '<div style="background:#1E7A5A; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Your Property</div>',
+            html: '<div style="background:#1E7A5A; color:red; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;"><i class="fa-solid fa-house" style="color:#fff;"></i> Your Property</div>',
             className: '',
             iconAnchor: [0, 0]
         });
@@ -225,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('lngInput').value = lng;
 
         const status = document.getElementById('pinStatus');
-        status.innerHTML = `✅ Location pinned at <strong>${lat}, ${lng}</strong>. Click again to change.`;
+        status.innerHTML = ` Location pinned at <strong>${lat}, ${lng}</strong>. Click again to change.`;
         status.style.background = '#d1fae5';
         status.style.color      = '#065f46';
     });
@@ -233,12 +241,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Use current location
     window.useMyLocation = function() {
         const btn = document.getElementById('useLocationBtn');
-        btn.textContent = '⏳ Getting location...';
+        btn.textContent = 'Getting location...';
         btn.disabled    = true;
 
         if (!navigator.geolocation) {
             alert('Geolocation is not supported by your browser.');
-            btn.textContent = '📍 Use My Current Location';
+            btn.textContent = '<i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i> Use My Current Location';
             btn.disabled    = false;
             return;
         }
@@ -251,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (marker) pinMap.removeLayer(marker);
 
                 const icon = L.divIcon({
-                    html: '<div style="background:#2563EB; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">📍 Your Location</div>',
+                    html: '<div style="background:#2563EB; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;"><i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i> Your Location</div>',
                     className: '',
                     iconAnchor: [0, 0]
                 });
@@ -263,16 +271,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('lngInput').value = lng;
 
                 const status = document.getElementById('pinStatus');
-                status.innerHTML = `✅ Set to your current location: <strong>${lat}, ${lng}</strong>. Click map to adjust.`;
+                status.innerHTML = ` Set to your current location: <strong>${lat}, ${lng}</strong>. Click map to adjust.`;
                 status.style.background = '#dbeafe';
                 status.style.color      = '#1e40af';
 
-                btn.textContent = '📍 Use My Current Location';
+                btn.textContent = 'Use My Current Location';
                 btn.disabled    = false;
             },
             function(error) {
                 alert('Could not get your location. Please allow location access or pin manually.');
-                btn.textContent = '📍 Use My Current Location';
+                btn.textContent = '<i class="Use My Current Location';
                 btn.disabled    = false;
             }
         );

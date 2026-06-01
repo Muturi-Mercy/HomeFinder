@@ -41,7 +41,7 @@
             @endphp
 
             <a href="/messages" style="position:relative; display:inline-flex; align-items:center; gap:6px; color:var(--text); font-weight:500; padding:8px 12px; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f0faf5'" onmouseout="this.style.background='transparent'">
-                💬 Messages
+                <i class="fa-solid fa-comments" style="color:#2563EB;"></i> Messages
                 @if($unreadMessages > 0)
                     <span style="background:#ef4444; color:white; font-size:11px; font-weight:700; padding:2px 7px; border-radius:10px; line-height:1.4;">{{ $unreadMessages }}</span>
                 @endif

@@ -4,27 +4,27 @@
 
 @section('content')
 <div class="page-header">
-    <h1>📈 Analytics & Insights</h1>
+    <h1><i class="fa-solid fa-arrow-trend-up" style="color: #1E7A5A; margin-right:6px;" ></i> Analytics & Insights</h1>
     <p>Platform performance and property distribution map.</p>
 </div>
 
 <div class="grid-3" style="margin-bottom:24px;">
     <div class="stat-card">
-        <div class="stat-icon green">👁</div>
+        <div class="stat-icon green"><i class="fa-solid fa-building-circle-check" style="color: #1E7A5A; margin-right:6px;"></i></div>
         <div class="stat-info">
             <h3>{{ \App\Models\Property::where('status','approved')->count() }}</h3>
             <p>Active Listings</p>
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon blue">📅</div>
+        <div class="stat-icon blue"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a; margin-right:6px;"></i></div>
         <div class="stat-info">
             <h3>{{ \App\Models\Booking::count() }}</h3>
             <p>Total Bookings</p>
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon orange">❤️</div>
+        <div class="stat-icon orange"><i class="fa-solid fa-heart" style="color: rgba(230, 57, 70, 1);"></i></div>
         <div class="stat-info">
             <h3>{{ \App\Models\Favourite::count() }}</h3>
             <p>Saved Listings</p>
@@ -35,7 +35,7 @@
 <!-- PROPERTY MAP -->
 <div class="card">
     <div class="card-header">
-        <h3>🗺️ Property Distribution Map — Rongai Area</h3>
+        <h3><i class="fa-solid fa-map-location-dot" style="margin-right:8px; color: #34a853;"></i> Property Distribution Map — Rongai Area</h3>
     </div>
     <div class="card-body">
         <div id="adminMap" style="height:500px; border-radius:10px; overflow:hidden;"></div>
@@ -74,7 +74,7 @@ allProperties.forEach(prop => {
                 : '#ef4444';
 
     const icon = L.divIcon({
-        html: `<div style="background:${color}; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3);">🏠 ${prop.title.substring(0,20)}</div>`,
+        html: `<div style="background:${color}; color:white; padding:5px 10px; border-radius:6px; font-size:11px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3);"><i class="fa-solid fa-house" style="color:white; margin-right:6px;"></i> ${prop.title.substring(0,20)}</div>`,
         className: '',
         iconAnchor: [0, 0]
     });
@@ -83,8 +83,8 @@ allProperties.forEach(prop => {
         .addTo(adminMap)
         .bindPopup(`
             <strong>${prop.title}</strong><br>
-            📍 ${prop.location}<br>
-            💰 KSh ${prop.price}/mo<br>
+            <i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> ${prop.location}<br>
+            <i class="fa-solid fa-coins" style="color: rgba(245, 158, 11, 1); margin-right:6px;"></i> KSh ${prop.price}/mo<br>
             Status: <strong style="color:${color}">${prop.status}</strong>
         `);
 });

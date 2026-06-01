@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>⚙️ System Settings</h1>
+    <h1><i class="fa-solid fa-user-tie" style="color: #1E7A5A; margin-right:6px;"></i>Admin Info</h1>
     <p>Configure HomeFinder platform settings.</p>
 </div>
 

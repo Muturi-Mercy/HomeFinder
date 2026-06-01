@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Listings - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="shortcut icon" href="{{ asset('img/logohf.png') }}">
     <style>
         .badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;}
         .badge-success{background:#d1fae5;color:#065f46;}
@@ -23,16 +31,19 @@
     <aside class="sidebar">
         <div class="sidebar-brand">Home<span>Finder</span></div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon">📊</span> Dashboard</a></li>
-            <li><a href="{{ route('landlord.properties') }}" class="active"><span class="icon">🏠</span> My Listings</a></li>
-            <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
-            <li><a href="{{ route('landlord.bookings') }}"><span class="icon">📅</span> Bookings</a></li>
-            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
+           <ul class="sidebar-menu">
+            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon"><i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i></span> Dashboard</a></li>
+            <li><a href="{{ route('landlord.properties') }}"class="active"><span class="icon"><i class="fa-solid fa-building-user" style="color: #1E7A5A; margin-right:6px;"></i></span> My Listings</a></li>
+            <li><a href="{{ route('landlord.properties.create') }}"><span class="icon"><i class="fa-solid fa-circle-plus"style="color: #1E7A5A; margin-right:6px;"></i></span> Add Property</a></li>
+            <li><a href="{{ route('landlord.bookings') }}"><span class="icon"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a; margin-right:6px;"></i> </span> Bookings</a></li>
+            <li><a href="{{ route('landlord.messages') }}" ><span class="icon"><i class="fa-solid fa-comments" style="color:#1e7a5a; margin-right:6px;"></i></span> Messages
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon"><i class="fa-solid fa-user" style="color:#1e7a5a"></i></span> Profile</a></li>
+        </ul>
         </ul>
         <div style="padding:24px;">
             <form method="POST" action="{{ route('landlord.logout') }}">
                 @csrf
-                <button type="submit" class="btn btn-outline" style="width:100%">🚪 Logout</button>
+                <button type="submit" class="btn btn-outline" style="width:100%"><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px;"></i> Logout</button>
             </form>
         </div>
     </aside>
@@ -43,7 +54,7 @@
                 <h1 style="font-size:24px; font-weight:700;">My Listings</h1>
                 <p style="color:var(--gray); font-size:14px;">Manage all your property listings.</p>
             </div>
-            <a href="{{ route('landlord.properties.create') }}" class="btn btn-primary">➕ Add New Property</a>
+            <a href="{{ route('landlord.properties.create') }}" class="btn btn-primary"><i class="fa-solid fa-circle-plus"style="color: white; margin-right:6px;"></i>  Add New Property</a>
         </div>
 
         @if(session('success'))
@@ -70,7 +81,7 @@
                                 @if($property->cover_image)
                                     <img src="{{ asset('storage/'.$property->cover_image) }}" style="width:48px; height:48px; border-radius:8px; object-fit:cover;">
                                 @else
-                                    <div style="width:48px; height:48px; background:var(--background); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px;">🏠</div>
+                                    <div style="width:48px; height:48px; background:var(--background); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px;"><i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i></div>
                                 @endif
                                 <div>
                                     <strong>{{ $property->title }}</strong>
@@ -92,11 +103,11 @@
                         </td>
                         <td>
                             <div style="display:flex; gap:8px;">
-                                <a href="{{ route('landlord.properties.edit', $property) }}" class="btn btn-sm btn-outline">✏️ Edit</a>
+                                <a href="{{ route('landlord.properties.edit', $property) }}" class="btn btn-sm btn-outline"> Edit</a>
                                 <form method="POST" action="{{ route('landlord.properties.destroy', $property) }}" onsubmit="return confirm('Delete this property?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">🗑</button>
+                                    <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
                                 </form>
                             </div>
                         </td>
@@ -104,7 +115,7 @@
                     @empty
                     <tr>
                         <td colspan="6" style="text-align:center; padding:48px; color:var(--gray);">
-                            No properties yet. <a href="{{ route('landlord.properties.create') }}" style="color:var(--primary);">Add your first property →</a>
+                            No properties yet. <a href="{{ route('landlord.properties.create') }}" style="color:var(--primary);">Add your first property <i class="fa-solid fa-angles-right"; style="color:#1e7a5a"></i></a>
                         </td>
                     </tr>
                     @endforelse

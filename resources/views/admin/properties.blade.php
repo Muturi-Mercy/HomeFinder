@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>🏠 Listings Management</h1>
+    <h1><i class="fa-solid fa-building" style="color: #1E7A5A; margin-right:6px;"></i> Listings Management</h1>
     <p>View and manage all property listings on HomeFinder.</p>
 </div>
 
@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
         <form method="GET" class="table-toolbar">
-            <input type="text" name="search" class="search-input" placeholder="🔍 Search by title or location..." value="{{ request('search') }}">
+            <input type="text" name="search" class="search-input" placeholder="Search by title or location..." value="{{ request('search') }}">
             <select name="status" class="filter-select">
                 <option value="">All Status</option>
                 <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
@@ -62,14 +62,14 @@
                             <form method="POST" action="{{ route('admin.properties.delete', $property) }}" onsubmit="return confirm('Delete this property?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-danger">🗑 Delete</button>
+                                <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</button>
                             </form>
                         </td>
                         <td style="color:var(--gray);">
                             @php $rc = $property->reviews()->count(); @endphp
                             @if($rc > 0)
                                 <span style="color:#f59e0b; font-weight:600;">
-                                    ★ {{ round($property->averageRating(), 1) }}
+                                    <i class="fa-solid fa-star"></i> {{ round($property->averageRating(), 1) }}
                                 </span>
                                 <span style="font-size:12px; color:var(--gray);"> ({{ $rc }})</span>
                             @else

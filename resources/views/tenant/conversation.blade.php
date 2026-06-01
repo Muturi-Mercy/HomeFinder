@@ -5,7 +5,7 @@
 <div style="max-width:800px; margin:0 auto; padding:40px 24px;">
 
     <!-- HEADER -->
-    <a href="{{ route('tenant.messages') }}" style="display:inline-flex; align-items:center; gap:6px; color:var(--gray); font-size:14px; margin-bottom:20px;">← Back to Messages</a>
+    <a href="{{ route('tenant.messages') }}" style="display:inline-flex; align-items:center; gap:6px; color:var(--gray); font-size:18px; margin-bottom:20px;"><i class="fa-solid fa-angles-left"; style="color:#1e7a5a"></i> Back to Messages</a>
 
     <div style="background:white; border-radius:12px; box-shadow:var(--shadow); overflow:hidden;">
 
@@ -15,15 +15,15 @@
                 @if($property->cover_image)
                     <img src="{{ asset('storage/'.$property->cover_image) }}" style="width:100%; height:100%; object-fit:cover;">
                 @else
-                    🏠
+                    <i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i>
                 @endif
             </div>
             <div>
                 <div style="font-weight:700; font-size:16px;">{{ $property->title }}</div>
                 <div style="font-size:13px; color:var(--gray);">
-                    💬 {{ $property->landlord->name ?? 'Landlord' }} •
-                    📍 {{ $property->location }} •
-                    <a href="/properties/{{ $property->id }}" style="color:var(--primary);">View Property</a>
+                    <i class="fa-solid fa-comments" style="color:#2563EB;"></i> {{ $property->landlord->name ?? 'Landlord' }} •
+                    <i class="fa-solid fa-location-dot" style="color: rgba(230,57,70,1); margin-right:6px;"></i> {{ $property->location }} •
+                    <a href="/properties/{{ $property->id }}" style="color:var(--primary);"><i class="fa-solid fa-house" style="color: rgba(245, 158, 11, 1); margin-right:6px;"></i> View Property</a>
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
                     style="flex:1; padding:12px 16px; border:1px solid var(--border); border-radius:10px; font-size:14px; outline:none; resize:none; font-family:inherit;"
                     onkeydown="if(event.ctrlKey && event.key==='Enter') this.form.submit()"></textarea>
                 <button type="submit" class="btn btn-primary" style="padding:12px 24px; align-self:flex-end;">
-                    Send 📤
+                    Send <i class="fa-solid fa-paper-plane" style="color: rgba(245, 158, 11, 1); margin-left:6px;"></i>
                 </button>
             </form>
             <p style="font-size:12px; color:var(--gray); margin-top:8px;">Press Ctrl+Enter to send quickly</p>

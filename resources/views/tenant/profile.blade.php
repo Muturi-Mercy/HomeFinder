@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="max-width:700px; margin:0 auto; padding:40px 24px;">
-    <h1 style="font-size:26px; font-weight:700; margin-bottom:8px;">👤 My Profile</h1>
+    <h1 style="font-size:26px; font-weight:700; margin-bottom:8px;"><i class="fa-solid fa-user" style="color:#1e7a5a"></i> My Profile</h1>
     <p style="color:var(--gray); margin-bottom:32px;">Manage your account details.</p>
 
     @if(session('success'))
@@ -88,12 +88,12 @@
                         placeholder="Enter new password">
                 </div>
                 <div style="display:flex; gap:12px;">
-                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-                    <a href="/favourites" class="btn btn-outline">❤️ Favourites</a>
-                    <a href="/bookings" class="btn btn-outline">📅 Bookings</a>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload" style="color: rgba(245, 158, 11, 1);"></i> Update</button>
+                    <a href="/favourites" class="btn btn-outline"><i class="fa-solid fa-heart" style="color: rgb(230, 57, 70);margin-right:6px;"></i> Favourites</a>
+                    <a href="/bookings" class="btn btn-outline"><i class="fa-solid fa-calendar-days"; style="color:#2563EB"></i>  Bookings</a>
                     <form method="POST" action="/logout" style="margin-left:auto;">
                         @csrf
-                        <button type="submit" class="btn" style="background:#dc2626; color:white;">🚪 Logout</button>
+                        <button type="submit" class="btn" style="background:#dc2626; color:white;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
                     </form>
                 </div>
             </form>

@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="max-width:1100px; margin:0 auto; padding:40px 24px;">
-    <h1 style="font-size:26px; font-weight:700; margin-bottom:8px;">📅 My Bookings</h1>
+    <h1 style="font-size:26px; font-weight:700; margin-bottom:8px;"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a"></i> My Bookings</h1>
     <p style="color:var(--gray); margin-bottom:32px;">Your property viewing appointments.</p>
 
     @if(session('success'))
@@ -12,7 +12,7 @@
 
     @if($bookings->count() === 0)
         <div style="text-align:center; padding:80px; background:white; border-radius:10px; box-shadow:var(--shadow);">
-            <div style="font-size:48px; margin-bottom:16px;">📅</div>
+            <div style="font-size:48px; margin-bottom:16px;"></div>
             <h3>No bookings yet</h3>
             <p style="color:var(--gray); margin-top:8px;">Browse houses and book a viewing appointment.</p>
             <a href="/browse" class="btn btn-primary" style="margin-top:20px; display:inline-block;">Browse Houses</a>
@@ -35,7 +35,7 @@
                     <tr style="border-bottom:1px solid var(--border);">
                         <td style="padding:16px 20px;">
                             <strong>{{ $booking->property->title ?? 'N/A' }}</strong>
-                            <div style="font-size:12px; color:var(--gray);">📍 {{ $booking->property->location ?? '' }}</div>
+                            <div style="font-size:12px; color:var(--gray);"><i class="fa-solid fa-location-dot" style="color: rgba(230,57,70,1); margin-right:6px;"></i> {{ $booking->property->location ?? '' }}</div>
                         </td>
                         <td style="padding:16px 20px; color:var(--gray);">
                             {{ $booking->property->landlord->name ?? 'N/A' }}
@@ -48,11 +48,11 @@
                         </td>
                         <td style="padding:16px 20px;">
                             @if($booking->status === 'confirmed')
-                                <span style="background:#d1fae5; color:#065f46; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">✓ Confirmed</span>
+                                <span style="background:#d1fae5; color:#065f46; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;"><i class="fa-solid fa-check"></i> Confirmed</span>
                             @elseif($booking->status === 'cancelled')
-                                <span style="background:#fee2e2; color:#991b1b; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">✗ Cancelled</span>
+                                <span style="background:#fee2e2; color:#991b1b; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;"><i class="fa-solid fa-x"></i> Cancelled</span>
                             @else
-                                <span style="background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">⏳ Pending</span>
+                                <span style="background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;"><i class="fa-solid fa-hourglass-half"></i> Pending</span>
                             @endif
                         </td>
                         <td style="padding:16px 20px;">

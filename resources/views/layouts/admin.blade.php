@@ -6,6 +6,14 @@
     <title>@yield('title', 'HomeFinder Admin Panel')</title>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+     <link rel="shortcut icon" href="{{ asset('img/logohf.png') }}">
     @yield('styles')
 </head>
 <body>
@@ -21,42 +29,42 @@
         <nav class="sidebar-nav">
             <div class="nav-section">Main</div>
             <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                <span class="nav-icon">📊</span> Dashboard
+                <span class="nav-icon"><i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i></span> Dashboard
             </a>
 
             <div class="nav-section">Management</div>
             <a href="{{ route('admin.users') }}" class="{{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                <span class="nav-icon">👥</span> User Management
+                <span class="nav-icon"><i class="fa-solid fa-users" style="color: #1E7A5A; margin-right:6px;"></i></span> User Management
             </a>
             <a href="{{ route('admin.landlords') }}" class="{{ request()->routeIs('admin.landlords') ? 'active' : '' }}">
-                <span class="nav-icon">🏢</span> Landlords
+                <span class="nav-icon"><i class="fa-solid fa-building-user" style="color: #1E7A5A; margin-right:6px;"></i></span> Landlords
             </a>
             <a href="{{ route('admin.verification') }}" class="{{ request()->routeIs('admin.verification') ? 'active' : '' }}">
-                <span class="nav-icon">✅</span> Property Verification
+                <span class="nav-icon"><i class="fa-solid fa-building-circle-check" style="color: #1E7A5A; margin-right:6px;"></i></span> Property Verification
                 @php $pending = \App\Models\Property::where('status','pending')->count(); @endphp
                 @if($pending > 0)
                     <span class="badge-count">{{ $pending }}</span>
                 @endif
             </a>
             <a href="{{ route('admin.properties') }}" class="{{ request()->routeIs('admin.properties') ? 'active' : '' }}">
-                <span class="nav-icon">🏠</span> Listings Management
+                <span class="nav-icon"><i class="fa-solid fa-building" style="color: #1E7A5A; margin-right:6px;"></i></span> Listings Management
             </a>
 
             <div class="nav-section">Reports</div>
             <a href="{{ route('admin.reports') }}" class="{{ request()->routeIs('admin.reports') ? 'active' : '' }}">
-                <span class="nav-icon">🚨</span> Reports & Complaints
+                <span class="nav-icon"><i class="fa-solid fa-building-circle-exclamation" style="color: #1E7A5A; margin-right:6px;"></i></span> Reports & Complaints
                 @php $pendingReports = \App\Models\Report::where('status','pending')->count(); @endphp
                 @if($pendingReports > 0)
                     <span class="badge-count">{{ $pendingReports }}</span>
                 @endif
             </a>
             <a href="{{ route('admin.analytics') }}" class="{{ request()->routeIs('admin.analytics') ? 'active' : '' }}">
-                <span class="nav-icon">📈</span> Analytics & Insights
+                <span class="nav-icon"><i class="fa-solid fa-arrow-trend-up" style="color: #1E7A5A; margin-right:6px;" ></i></span> Analytics & Insights
             </a>
 
             <div class="nav-section">System</div>
             <a href="{{ route('admin.settings') }}" class="{{ request()->routeIs('admin.settings') ? 'active' : '' }}">
-                <span class="nav-icon">⚙️</span> System Settings
+                <span class="nav-icon"><i class="fa-solid fa-user-tie" style="color: #1E7A5A; margin-right:6px;"></i></span> Admin Info
             </a>
         </nav>
 
@@ -64,7 +72,7 @@
             <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit" class="btn btn-outline" style="width:100%; justify-content:center;">
-                    🚪 Logout
+                    <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px;"></i>  Logout
                 </button>
             </form>
         </div>

@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
         body { background: linear-gradient(135deg, #f0faf5 0%, #e8f5e9 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
         .auth-card { background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); width:100%; max-width:440px; padding:40px; }
@@ -32,13 +39,14 @@
 <body>
 <div class="auth-card">
     <div class="auth-logo">
-        <h1>🏠 Home<span>Finder</span></h1>
+        <img src="{{ asset('img/logohf.png') }}" alt="HomeFinder Logo" class="logo"> 
+        <h1>Home<span>Finder</span></h1>
         <p>Connecting Landlords & Tenants Seamlessly</p>
     </div>
 
     <div class="role-tabs">
-        <a href="/login" class="role-tab active">🏠 I'm a Tenant</a>
-        <a href="/landlord/login" class="role-tab">🏢 I'm a Landlord</a>
+        <a href="/login" class="role-tab active"><i class="fa-solid fa-house"></i>I'm a Tenant</a>
+        <a href="/landlord/login" class="role-tab"><i class="fa-solid fa-building"></i> I'm a Landlord</a>
     </div>
 
     <div class="auth-title">Welcome Back!</div>
@@ -68,7 +76,7 @@
             <input type="checkbox" name="remember" id="remember" style="accent-color:var(--primary); width:16px; height:16px;">
             <label for="remember" style="font-size:13px; color:var(--gray); cursor:pointer;">Remember me</label>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login →</button>
+        <button type="submit" class="btn btn-primary btn-block">Login <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
     </form>
 
     <div class="auth-links">

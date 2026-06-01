@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Bookings - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="shortcut icon" href="{{ asset('img/logohf.png') }}">
     <style>
         .badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;}
         .badge-success{background:#d1fae5;color:#065f46;}
@@ -21,23 +29,24 @@
     <aside class="sidebar">
         <div class="sidebar-brand">Home<span>Finder</span></div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon">📊</span> Dashboard</a></li>
-            <li><a href="{{ route('landlord.properties') }}"><span class="icon">🏠</span> My Listings</a></li>
-            <li><a href="{{ route('landlord.properties.create') }}"><span class="icon">➕</span> Add Property</a></li>
-            <li><a href="{{ route('landlord.bookings') }}" class="active"><span class="icon">📅</span> Bookings</a></li>
-            <li><a href="{{ route('landlord.profile') }}"><span class="icon">👤</span> Profile</a></li>
+            <li><a href="{{ route('landlord.dashboard') }}"><span class="icon"><i class="fa-solid fa-house" style="color: #1E7A5A; margin-right:6px;"></i></span> Dashboard</a></li>
+            <li><a href="{{ route('landlord.properties') }}"><span class="icon"><i class="fa-solid fa-building-user" style="color: #1E7A5A; margin-right:6px;"></i></span> My Listings</a></li>
+            <li><a href="{{ route('landlord.properties.create') }}"><span class="icon"><i class="fa-solid fa-circle-plus"style="color: #1E7A5A; margin-right:6px;"></i></span> Add Property</a></li>
+            <li><a href="{{ route('landlord.bookings') }}"class="active"><span class="icon"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a; margin-right:6px;"></i> </span> Bookings</a></li>
+            <li><a href="{{ route('landlord.messages') }}" ><span class="icon"><i class="fa-solid fa-comments" style="color:#1e7a5a; margin-right:6px;"></i></span> Messages
+            <li><a href="{{ route('landlord.profile') }}"><span class="icon"><i class="fa-solid fa-user" style="color:#1e7a5a"></i></span> Profile</a></li>
         </ul>
         <div style="padding:24px;">
             <form method="POST" action="{{ route('landlord.logout') }}">
                 @csrf
-                <button type="submit" class="btn btn-outline" style="width:100%">🚪 Logout</button>
+                <button type="submit" class="btn btn-outline" style="width:100%"><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px;"></i>  Logout</button>
             </form>
         </div>
     </aside>
 
     <main class="dashboard-content">
         <div style="margin-bottom:24px;">
-            <h1 style="font-size:24px; font-weight:700;">📅 Viewing Requests</h1>
+            <h1 style="font-size:24px; font-weight:700;"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a; margin-right:6px;"></i>  Viewing Requests</h1>
             <p style="color:var(--gray); font-size:14px;">Manage tenant viewing appointments.</p>
         </div>
 

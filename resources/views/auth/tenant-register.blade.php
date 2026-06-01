@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account - HomeFinder</title>
     <link rel="stylesheet" href="{{ asset('css/homefinder.css') }}">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
         body { background: linear-gradient(135deg, #f0faf5 0%, #e8f5e9 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
         .auth-card { background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); width:100%; max-width:480px; padding:40px; }
@@ -27,13 +34,14 @@
 <body>
 <div class="auth-card">
     <div class="auth-logo">
-        <h1>🏠 Home<span>Finder</span></h1>
+         <img src="{{ asset('img/logohf.png') }}" alt="HomeFinder Logo" class="logo">
+        <h1>Home<span>Finder</span></h1>
         <p style="color:var(--gray); font-size:14px;">Create your free tenant account</p>
     </div>
 
     <div class="role-tabs">
-        <a href="/register" class="role-tab active">🏠 I'm a Tenant</a>
-        <a href="/landlord/register" class="role-tab">🏢 I'm a Landlord</a>
+        <a href="/register" class="role-tab active"><i class="fa-solid fa-house"></i> I'm a Tenant</a>
+        <a href="/landlord/register" class="role-tab"><i class="fa-solid fa-building"></i> I'm a Landlord</a>
     </div>
 
     @if($errors->any())
@@ -51,7 +59,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" name="name" class="form-control" placeholder="John Doe" value="{{ old('name') }}" required>
+                <input type="text" name="name" class="form-control" placeholder="Neela Lynn" value="{{ old('name') }}" required>
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
@@ -60,7 +68,7 @@
         </div>
         <div class="form-group">
             <label>Email Address</label>
-            <input type="email" name="email" class="form-control" placeholder="you@example.com" value="{{ old('email') }}" required>
+            <input type="email" name="email" class="form-control" placeholder="neela@gmail.com" value="{{ old('email') }}" required>
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -72,11 +80,11 @@
                 <input type="password" name="password_confirmation" class="form-control" placeholder="Repeat password" required>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Create Account →</button>
+        <button type="submit" class="btn btn-primary btn-block">Create Account <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
     </form>
 
     <div class="auth-links">
-        Already have an account? <a href="/login">Login here</a>
+        Already have an account? <a href="/login">Login here </a>
     </div>
 </div>
 </body>

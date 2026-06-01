@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>🏢 Landlord Management</h1>
+    <h1><i class="fa-solid fa-building-user" style="color: #1E7A5A; margin-right:6px;"></i> Landlord Management</h1>
     <p>Manage all registered landlords and agents.</p>
 </div>
 
@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
         <form method="GET" class="table-toolbar">
-            <input type="text" name="search" class="search-input" placeholder="🔍 Search landlords..." value="{{ request('search') }}">
+            <input type="text" name="search" class="search-input" placeholder="Search landlords..." value="{{ request('search') }}">
             <button type="submit" class="btn btn-primary">Search</button>
             <a href="{{ route('admin.landlords') }}" class="btn btn-outline">Clear</a>
         </form>
@@ -42,7 +42,7 @@
                         <td>{{ $landlord->phone }}</td>
                         <td>
                             <span class="badge {{ $landlord->is_verified ? 'badge-success' : 'badge-gray' }}">
-                                {{ $landlord->is_verified ? '✓ Verified' : 'Unverified' }}
+                                {{ $landlord->is_verified ? ' Verified' : 'Unverified' }}
                             </span>
                         </td>
                         <td>
@@ -62,7 +62,7 @@
                                 <form method="POST" action="{{ route('admin.landlords.verify', $landlord) }}">
                                     @csrf
                                     <button class="btn btn-sm {{ $landlord->is_verified ? 'btn-warning' : 'btn-primary' }}">
-                                        {{ $landlord->is_verified ? '✓ Verified' : 'Verify' }}
+                                        {{ $landlord->is_verified ? ' Verified' : 'Verify' }}
                                     </button>
                                 </form>
                             </div>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>🚨 Reports & Complaints</h1>
+    <h1><i class="fa-solid fa-building-circle-exclamation" style="color: red; margin-right:6px;"></i> Reports & Complaints</h1>
     <p>Review fraud reports and complaints submitted by users.</p>
 </div>
 

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>👥 User Management</h1>
+    <h1><i class="fa-solid fa-users" style="color: #1E7A5A; margin-right:6px;"></i> User Management</h1>
     <p>Manage all registered tenants on HomeFinder.</p>
 </div>
 
@@ -15,7 +15,7 @@
     <div class="card-body">
         <!-- SEARCH -->
         <form method="GET" class="table-toolbar">
-            <input type="text" name="search" class="search-input" placeholder="🔍 Search by name or email..." value="{{ request('search') }}">
+            <input type="text" name="search" class="search-input" placeholder="Search by name or email..." value="{{ request('search') }}">
             <select name="status" class="filter-select">
                 <option value="">All Status</option>
                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>

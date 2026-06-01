@@ -268,7 +268,7 @@
                     @if($property->cover_image)
                         <img src="{{ asset('storage/'.$property->cover_image) }}" alt="{{ $property->title }}">
                     @else
-                        <div style="width:100%; height:200px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:48px;">🏠</div>
+                        <div style="width:100%; height:200px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:48px;"><i class="fa-solid fa-house"></i></div>
                     @endif
                     <div class="property-card-body">
 
@@ -294,7 +294,7 @@
 
                         <div class="property-title">{{ $property->title }}</div>
                         <div class="property-location"><i class="fa-solid fa-location-dot" style="color: rgba(230,57,70,1); margin-right:6px;"></i>
-                            {{ $property->location }} {{ $property->location }}</div>
+                            {{ $property->location }}</div>
 
                         {{-- STAR RATING --}}
                         @php
@@ -443,7 +443,7 @@ function toggleMapView() {
 
     if (mapVisible) {
         container.style.display = 'block';
-        btn.textContent         = '📋 List View';
+        btn.textContent         = 'List View';
         btn.style.background    = 'var(--primary)';
         btn.style.color         = 'white';
 
@@ -458,7 +458,7 @@ function toggleMapView() {
             const bounds = [];
             properties.forEach(prop => {
                 const icon = L.divIcon({
-                    html: `<div style="background:#1E7A5A; color:white; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;">🏠 KSh ${prop.price}</div>`,
+                    html: `<div style="background:#1E7A5A; color:white; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;"><i class="fa-solid fa-house"></i> KSh ${prop.price}</div>`,
                     className: '',
                     iconAnchor: [0, 0]
                 });

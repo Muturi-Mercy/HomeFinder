@@ -44,7 +44,7 @@
                                 <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
                                     <div style="display:flex; gap:2px;">
                                         @for($i = 1; $i <= 5; $i++)
-                                            <span style="font-size:18px; color:{{ $i <= round($avgRating) ? '#f59e0b' : '#d1d5db' }};">★</span>
+                                            <span style="font-size:18px; color:{{ $i <= round($avgRating) ? '#f59e0b' : '#d1d5db' }};"><i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1);"></i></span>
                                         @endfor
                                     </div>
                                     <span style="font-size:16px; font-weight:700; color:#f59e0b;">{{ round($avgRating, 1) }}</span>
@@ -52,7 +52,7 @@
                                 </div>
                             @endif
                     </div>
-                    <span style="background:#d1fae5; color:#065f46; padding:4px 14px; border-radius:20px; font-size:13px; font-weight:600;">✓ Verified</span>
+                    <span style="background:#d1fae5; color:#065f46; padding:4px 14px; border-radius:20px; font-size:13px; font-weight:600;"><i class="fa-solid fa-award"></i> Verified</span>
                 </div>
 
                 <div style="font-size:28px; font-weight:700; color:var(--primary); margin-bottom:20px;">
@@ -169,23 +169,23 @@
                     </div>
                     <div>
                         <div style="font-weight:600;">{{ $property->landlord->name }}</div>
-                        <div style="font-size:12px; color:var(--gray);">✓ Verified Landlord</div>
+                        <div style="font-size:12px; color:var(--gray);"><i class="fa-solid fa-award" style="color:#1e7a5a"></i> Verified Landlord</div>
                     </div>
                 </div>
-                <div style="font-size:13px; color:var(--gray); margin-bottom:16px;">📞 {{ $property->landlord->phone }}</div>
+                <div style="font-size:13px; color:var(--gray); margin-bottom:16px;"><i class="fa-solid fa-envelope"  style="color: rgba(37, 99, 235, 1);"></i> {{ $property->landlord->phone }}</div>
 
                 @auth
                     <!-- MESSAGE LANDLORD BUTTON -->
                         <a href="{{ route('tenant.conversation', $property) }}"
                             class="btn btn-primary"
                             style="width:100%; display:block; text-align:center; margin-bottom:10px;">
-                            💬 Message Landlord
+                            <i class="fa-solid fa-comments" ></i> Message Landlord
                         </a>
                 @else
                         <a href="/login"
                             class="btn btn-primary"
                             style="width:100%; display:block; text-align:center; margin-bottom:10px;">
-                            💬 Message Landlord
+                            <i class="fa-solid fa-comments" ></i> Message Landlord
                         </a>
                 @endauth
 
@@ -194,17 +194,17 @@
                     <form method="POST" action="{{ route('tenant.favourite.toggle', $property) }}" style="margin-bottom:10px;">
                         @csrf
                         <button type="submit" class="btn {{ $isFavourited ? 'btn-primary' : 'btn-outline' }}" style="width:100%;">
-                            {{ $isFavourited ? '❤️ Saved' : '🤍 Save Property' }}
+                            {{ $isFavourited ? ' Saved' : 'Save Property' }}
                         </button>
                     </form>
                 @else
-                    <a href="/login" class="btn btn-outline" style="width:100%; display:block; text-align:center; margin-bottom:10px;">🤍 Save Property</a>
+                    <a href="/login" class="btn btn-outline" style="width:100%; display:block; text-align:center; margin-bottom:10px;"><i class="fa-solid fa-heart" style="color: rgba(230, 57, 70, 1);"></i> Save Property</a>
                 @endauth
             </div>
 
             <!-- BOOK VIEWING -->
             <div style="background:white; border-radius:12px; padding:24px; box-shadow:var(--shadow);">
-                <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">📅 Book a Viewing</h3>
+                <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;"><i class="fa-solid fa-calendar-days"; style="color:#1e7a5a"></i> Book a Viewing</h3>
 
                 @if(session('success'))
                     <div style="background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; padding:12px; border-radius:8px; font-size:13px; margin-bottom:16px;">{{ session('success') }}</div>
@@ -233,7 +233,7 @@
                         <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Message (Optional)</label>
                         <textarea name="message" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none; resize:vertical; min-height:80px;" placeholder="Any specific questions for the landlord..."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%;">📅 Schedule Viewing</button>
+                    <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fa-solid fa-calendar-days"></i>  Schedule Viewing</button>
                 </form>
                 @else
                     <p style="color:var(--gray); font-size:14px; text-align:center; margin-bottom:16px;">Please login to book a viewing.</p>
@@ -247,7 +247,7 @@
                 <div style="margin-top:20px; background:#fff8f8; border:1px solid #fecaca; border-radius:10px; padding:16px;">
                     <div style="display:flex; align-items:center; justify-content:space-between;">
                         <div>
-                            <p style="font-size:13px; font-weight:600; color:#991b1b; margin-bottom:2px;">🚩 Report this Listing</p>
+                            <p style="font-size:13px; font-weight:600; color:#991b1b; margin-bottom:2px;"><i class="fa-solid fa-flag" style="color: rgba(230, 57, 70, 1);"></i> Report this Listing</p>
                             <p style="font-size:12px; color:var(--gray);">Seen something suspicious? Let us know.</p>
                         </div>
                         <button onclick="toggleReport()"
@@ -269,13 +269,13 @@
                                     style="width:100%; padding:10px; border:1px solid #fca5a5; border-radius:8px; font-size:13px; outline:none; background:white;"
                                     required>
                                     <option value="">Select a reason...</option>
-                                    <option value="Fake Listing">🚫 Fake Listing</option>
-                                    <option value="Wrong Information">❌ Wrong Information</option>
-                                    <option value="Already Rented">🔒 Already Rented</option>
-                                    <option value="Scam/Fraud">⚠️ Scam / Fraud</option>
-                                    <option value="Duplicate Listing">📋 Duplicate Listing</option>
-                                    <option value="Misleading Photos">📷 Misleading Photos</option>
-                                    <option value="Other">💬 Other</option>
+                                    <option value="Fake Listing">Fake Listing</option>
+                                    <option value="Wrong Information">Wrong Information</option>
+                                    <option value="Already Rented">Already Rented</option>
+                                    <option value="Scam/Fraud">Scam / Fraud</option>
+                                    <option value="Duplicate Listing">Duplicate Listing</option>
+                                    <option value="Misleading Photos">Misleading Photos</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <div style="margin-bottom:12px;">
@@ -287,7 +287,7 @@
                             <div style="display:flex; gap:8px;">
                                 <button type="submit"
                                     style="flex:1; background:#ef4444; color:white; border:none; padding:10px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">
-                                    🚩 Submit Report
+                                     Submit Report
                                 </button>
                                 <button type="button" onclick="toggleReport()"
                                     style="background:var(--background); border:1px solid var(--border); padding:10px 16px; border-radius:8px; font-size:13px; cursor:pointer;">
@@ -306,7 +306,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
             <div>
                 <h2 style="font-size:22px; font-weight:700;">
-                    ⭐ Reviews
+                    <i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1)"></i> Reviews
                     <span style="font-size:16px; font-weight:400; color:var(--gray);">({{ $property->reviewCount() }})</span>
                 </h2>
                 @if($property->reviewCount() > 0)
@@ -314,7 +314,7 @@
                         @php $avg = round($property->averageRating(), 1); @endphp
                         <div style="display:flex; gap:2px;">
                             @for($i = 1; $i <= 5; $i++)
-                                <span style="font-size:20px; color:{{ $i <= round($avg) ? '#f59e0b' : '#d1d5db' }};">★</span>
+                                <span style="font-size:20px; color:{{ $i <= round($avg) ? '#f59e0b' : '#d1d5db' }};"><i class="fa-solid fa-star"></i></span>
                             @endfor
                         </div>
                         <span style="font-size:18px; font-weight:700; color:#f59e0b;">{{ $avg }}</span>
@@ -335,7 +335,7 @@
 
             @if($hasBooked && !$hasReviewed)
                 <div style="background:white; border-radius:12px; padding:28px; box-shadow:var(--shadow); margin-bottom:28px; border-left:4px solid var(--primary);">
-                    <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;">✍️ Write a Review</h3>
+                    <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;"> Write a Review</h3>
                     <p style="font-size:13px; color:var(--gray); margin-bottom:20px;">Share your experience about this property.</p>
 
                     @if(session('error'))
@@ -357,7 +357,7 @@
                                         style="font-size:36px; cursor:pointer; color:#d1d5db; transition:color 0.1s;"
                                         onmouseover="highlightStars({{ $i }})"
                                         onmouseout="resetStars()"
-                                        onclick="selectStar({{ $i }})">★</label>
+                                        onclick="selectStar({{ $i }})"><i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1);"></i></label>
                                 @endfor
                             </div>
                             <p style="font-size:12px; color:var(--gray); margin-top:6px;" id="ratingText">Click a star to rate</p>
@@ -374,19 +374,19 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="padding:12px 28px;">
-                            ⭐ Submit Review
+                            <i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1)"></i> Submit Review
                         </button>
                     </form>
                 </div>
 
             @elseif($hasReviewed)
                 <div style="background:#f0faf5; border-radius:10px; padding:16px 20px; margin-bottom:28px; font-size:14px; color:var(--primary); border:1px solid #6ee7b7;">
-                    ✅ You have already reviewed this property.
+                     You have already reviewed this property.
                 </div>
 
             @elseif(!$hasBooked)
                 <div style="background:#fef3c7; border-radius:10px; padding:16px 20px; margin-bottom:28px; font-size:14px; color:#92400e; border:1px solid #fcd34d;">
-                    📅 You need to <strong>book a viewing</strong> for this property before you can leave a review.
+                     You need to <strong>book a viewing</strong> for this property before you can leave a review.
                 </div>
             @endif
         @else
@@ -400,7 +400,7 @@
 
         @if($reviews->count() === 0)
             <div style="text-align:center; padding:48px; background:white; border-radius:12px; box-shadow:var(--shadow);">
-                <div style="font-size:40px; margin-bottom:12px;">⭐</div>
+                <div style="font-size:40px; margin-bottom:12px;"><i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1)"></i></div>
                 <h3 style="font-size:17px; font-weight:600;">No reviews yet</h3>
                 <p style="color:var(--gray); font-size:14px; margin-top:6px;">Be the first to review this property.</p>
             </div>
@@ -424,7 +424,7 @@
                             {{-- STARS --}}
                             <div style="display:flex; gap:2px;">
                                 @for($i = 1; $i <= 5; $i++)
-                                    <span style="font-size:18px; color:{{ $i <= $review->rating ? '#f59e0b' : '#d1d5db' }};">★</span>
+                                    <span style="font-size:18px; color:{{ $i <= $review->rating ? '#f59e0b' : '#d1d5db' }};"><i class="fa-solid fa-star" style="color: rgba(245, 158, 11, 1);"></i></span>
                                 @endfor
                             </div>
                             <span style="font-size:14px; font-weight:700; color:#f59e0b;">{{ $review->rating }}/5</span>
@@ -441,7 +441,7 @@
                                             style="background:none; border:none; color:#9ca3af; cursor:pointer; font-size:13px; padding:2px 6px; border-radius:4px;"
                                             onmouseover="this.style.color='#ef4444'"
                                             onmouseout="this.style.color='#9ca3af'">
-                                            🗑 Delete
+                                            <i class="fa-regular fa-trash-can"></i> Delete
                                         </button>
                                     </form>
                                 @endif
@@ -471,11 +471,11 @@
                 @if($related->cover_image)
                     <img src="{{ asset('storage/'.$related->cover_image) }}" alt="{{ $related->title }}">
                 @else
-                    <div style="width:100%; height:200px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:48px;">🏠</div>
+                    <div style="width:100%; height:200px; background:var(--background); display:flex; align-items:center; justify-content:center; font-size:48px;"><i class="fa-solid fa-house"></i></div>
                 @endif
                 <div class="property-card-body">
                     <div class="property-title">{{ $related->title }}</div>
-                    <div class="property-location">📍 {{ $related->location }}</div>
+                    <div class="property-location"><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> {{ $related->location }}</div>
                     <div class="property-price">KSh {{ number_format($related->price) }} <span>/ month</span></div>
                 </div>
             </div>
@@ -508,7 +508,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Custom property marker
 const propertyIcon = L.divIcon({
-    html: '<div style="background:#1E7A5A; color:white; padding:8px 12px; border-radius:8px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.3);">🏠 ' + propName + '</div>',
+    html: '<div style=color:#2563EB; padding:8px 12px; border-radius:8px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.3);"><i class="fa-solid fa-house"></i>' + propName + '</div>',
     className: '',
     iconAnchor: [0, 0]
 });
@@ -516,7 +516,7 @@ const propertyIcon = L.divIcon({
 // Add property marker
 const propertyMarker = L.marker([propLat, propLng], {icon: propertyIcon})
     .addTo(map)
-    .bindPopup('<strong>' + propName + '</strong><br>📍 {{ addslashes($property->location) }}<br>💰 KSh {{ number_format($property->price) }}/month')
+    .bindPopup('<strong>' + propName + '</strong><br><i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> {{ addslashes($property->location) }}<br><i class="fa-solid fa-coins" style="color:#34a853";></i> KSh {{ number_format($property->price) }}/month')
     .openPopup();
 
 let userMarker  = null;
@@ -530,7 +530,7 @@ function getMyLocation() {
     }
 
     const btn = event.target;
-    btn.textContent = '⏳ Getting your location...';
+    btn.textContent = ' Getting your location...';
     btn.disabled = true;
 
     navigator.geolocation.getCurrentPosition(
@@ -543,14 +543,14 @@ function getMyLocation() {
 
             // Add user marker
             const userIcon = L.divIcon({
-                html: '<div style="background:#2563EB; color:white; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3);">📍 You</div>',
+                html: '<div color:#2563EB; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; box-shadow:0 2px 8px rgba(0,0,0,0.3);"><i class="fa-solid fa-location-pin" style="color: rgb(230, 57, 70);"></i></div>',
                 className: '',
                 iconAnchor: [0, 0]
             });
 
             userMarker = L.marker([userLat, userLng], {icon: userIcon})
                 .addTo(map)
-                .bindPopup('📍 Your Location')
+                .bindPopup('<i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Your Location')
                 .openPopup();
 
             // Fit map to show both markers
@@ -563,12 +563,12 @@ function getMyLocation() {
             // Get route
             getRoute(userLat, userLng, propLat, propLng);
 
-            btn.textContent = '🔄 Update My Location';
+            btn.textContent = ' Update My Location';
             btn.disabled = false;
         },
         function(error) {
             alert('Could not get your location. Please allow location access.');
-            btn.textContent = '📍 Show Route From My Location';
+            btn.textContent = '<i class="fa-solid fa-map-pin" style="color: rgba(230, 57, 70, 1);"></i> Show Route From My Location';
             btn.disabled = false;
         }
     );
